@@ -1,3 +1,4 @@
+import type { Ref } from 'vue';
 export interface ChatMessage {
   id: string;
   text: string;
