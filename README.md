@@ -1,114 +1,101 @@
-# Chatbot frontend for N8N
+# Tourtools N8N Chatbot
 
-```txt
-├── src/
-│   ├── components/
-│   │   ├── Chat.vue            # Componente principale 
-│   │   ├── ChatInput.vue       # Input per i messaggi
-│   │   ├── ChatMessage.vue     # Componente per i singoli messaggi
-│   │   └── ChatWindow.vue      # Wrapper per modalità finestra
-│   ├── composables/
-│   │   ├── useChat.ts          # Logica principale della chat
-│   │   └── useOptions.ts       # Gestione opzioni
-│   ├── plugins/
-│   │   └── chatPlugin.ts       # Plugin Vue per la chat
-│   ├── utils/
-│   │   ├── api.ts              # Chiamate API
-│   │   └── helpers.ts          # Funzioni di utilità
-│   ├── App.vue                 # Componente root
-│   ├── main.ts                 # Entry point
-│   └── types.ts                # Type definitions
-├── package.json
-├── vite.config.ts
-└── README.md
-```
+Fork del frontend ufficiale del chatbot N8N
 
-# Simple Chat N8N
+## Setup Locale
 
-Una versione semplificata del widget di chat per n8n, implementata con Vue 3 e TypeScript.
-
-## Caratteristiche
-
-- 🔄 Chat in modalità finestra o schermo intero
-- 💬 Invio e ricezione di messaggi
-- 🗄️ Sessioni di chat persistenti
-- 🎨 Personalizzazione UI con variabili CSS
-- 📱 Layout responsive
-- 🔌 Facile integrazione
-
-## Installazione
+### Clone e Installazione
 
 ```bash
-npm install tt-chat-n8n
+# Clona il repository
+git clone [url-del-tuo-repository]
+cd tt-chat-n8n
+
+# Installa le dipendenze
+npm install
 ```
 
-## Utilizzo
+### Comandi di Sviluppo
 
-### Inclusione tramite CDN
+```bash
+# Avvia il server di sviluppo
+npm run dev
 
-```html
-<link href="https://cdn.jsdelivr.net/npm/tt-chat-n8n/dist/style.css" rel="stylesheet">
-<script type="module">
-  import { createChat } from 'https://cdn.jsdelivr.net/npm/tt-chat-n8n/dist/tt-chat.es.js';
+# Esegue la build per la produzione
+npm run build
 
-  createChat({
-    webhookUrl: 'YOUR_N8N_WEBHOOK_URL'
-  });
-</script>
+# Verifica i tipi TypeScript
+npm run typecheck
 ```
 
-### Inclusione tramite NPM
+## Utilizzo Base
+
+### Integrazione come Dipendenza Locale
 
 ```javascript
-import { createChat } from 'tt-chat-n8n';
-import 'tt-chat-n8n/style.css';
+// Nel tuo progetto principale
+import { createChat } from './path/to/tt-chat-n8n/dist/tt-chat.es.js';
+import './path/to/tt-chat-n8n/dist/style.css';
 
 createChat({
   webhookUrl: 'YOUR_N8N_WEBHOOK_URL'
 });
 ```
 
-## Opzioni
+### Integrazione Diretta nella Pagina HTML
+
+```html
+<script type="module">
+  import { createChat } from './path/to/tt-chat-n8n/dist/tt-chat.es.js';
+  
+  createChat({
+    webhookUrl: 'YOUR_N8N_WEBHOOK_URL'
+  });
+</script>
+<link href="./path/to/tt-chat-n8n/dist/style.css" rel="stylesheet">
+```
+
+## Opzioni di Configurazione
 
 ```javascript
 createChat({
-  // Obbligatorio: URL del webhook n8n
+  // Obbligatorio: URL del webhook N8N
   webhookUrl: 'https://n8n.example.com/webhook/your-id',
   
-  // Opzionale: Configurazione della richiesta
+  // Configurazione della richiesta HTTP
   webhookConfig: {
     method: 'POST', // 'GET' o 'POST'
     headers: {} // Header HTTP personalizzati
   },
   
-  // Opzionale: Selettore CSS o elemento DOM dove montare la chat
+  // Selettore o elemento DOM per il mounting
   target: '#tt-chat-n8n',
   
-  // Opzionale: Modalità di visualizzazione
-  mode: 'window', // 'window' o 'fullscreen'
+  // Modalità di visualizzazione
+  mode: 'window', // 'window' (finestra popup) o 'fullscreen'
   
-  // Opzionale: Messaggi iniziali da mostrare
+  // Messaggi iniziali da visualizzare
   initialMessages: [
     'Ciao! 👋',
     'Come posso aiutarti oggi?'
   ],
   
-  // Opzionale: Chiavi per i parametri della richiesta
-  chatInputKey: 'chatInput',
-  chatSessionKey: 'sessionId',
+  // Chiavi per parametri della richiesta
+  chatInputKey: 'chatInput', // nome del parametro per il testo di input
+  chatSessionKey: 'sessionId', // nome del parametro per l'ID sessione
   
-  // Opzionale: Carica la sessione precedente
-  loadPreviousSession: true,
+  // Gestione sessione
+  loadPreviousSession: true, // carica la conversazione precedente
   
-  // Opzionale: Consenti upload di file
-  allowFileUploads: false,
+  // Funzionalità file
+  allowFileUploads: false, // abilita upload di file
   
-  // Opzionale: Testi personalizzati
+  // Testi dell'interfaccia
   title: 'Chat',
   subtitle: 'Come posso aiutarti?',
   placeholder: 'Scrivi un messaggio...',
   
-  // Opzionale: Personalizzazione del tema
+  // Personalizzazione tema
   theme: {
     primaryColor: '#2196f3',
     backgroundColor: '#ffffff',
@@ -122,33 +109,92 @@ createChat({
 });
 ```
 
-## Funzionamento con N8N
+## Integrazione con N8N
 
-Per utilizzare questo widget di chat, è necessario configurare un flusso di lavoro N8N che utilizza il nodo "Chat Trigger". Il flusso di lavoro deve gestire due tipi di azioni:
+Il widget comunica con un flusso di lavoro N8N attraverso due principali azioni:
 
-1. `loadPreviousSession` - Quando l'utente apre la chat e la sessione precedente deve essere caricata
-2. `sendMessage` - Quando l'utente invia un messaggio
+1. **loadPreviousSession**: Carica messaggi di una sessione precedente
+2. **sendMessage**: Invia un nuovo messaggio e riceve la risposta
 
-### Esempio di flusso di lavoro N8N
+### Configurazione del Webhook N8N
 
-Consulta la documentazione ufficiale di N8N per creare un flusso di lavoro con il nodo "Chat Trigger" o utilizza il flusso di esempio fornito nella repository.
+1. Crea un nuovo workflow in N8N
+2. Aggiungi un nodo "Webhook" come trigger
+3. Configura il webhook per gestire i due tipi di richieste:
+   - `action: 'loadPreviousSession'` per caricare conversazioni passate
+   - `action: 'sendMessage'` per elaborare nuovi messaggi
 
-## Personalizzazione CSS
+### Formato Risposta del Webhook
 
-Il widget può essere personalizzato tramite le variabili CSS:
+```javascript
+// Esempio di risposta per sendMessage
+{
+  "output": "Questo è il messaggio di risposta del bot",
+  "actions": [
+    {
+      "type": "button",
+      "label": "Visita il sito",
+      "action": "https://example.com"
+    }
+  ]
+}
 
-```css
-:root {
-  --tt-chat-primary-color: #2196f3;
-  --tt-chat-bg: #ffffff;
-  --tt-chat-user-bg: #e0f7fa;
-  --tt-chat-bot-bg: #f5f5f5;
-  --tt-chat-user-color: #000000;
-  --tt-chat-bot-color: #000000;
-  --tt-chat-header-bg: #f5f5f5;
-  --tt-chat-header-color: #333333;
+// Esempio di risposta per loadPreviousSession
+{
+  "data": [
+    {
+      "id": "HumanMessage_1",
+      "kwargs": {
+        "content": "Messaggio dell'utente"
+      }
+    },
+    {
+      "id": "AIMessage_1",
+      "kwargs": {
+        "content": "Risposta del bot"
+      }
+    }
+  ]
 }
 ```
+
+## Gestione della Sessione
+
+Il widget salva l'ID sessione in `localStorage` per mantenere la continuità della conversazione. Puoi disabilitare questo comportamento impostando `loadPreviousSession: false`.
+
+## API Javascript
+
+```javascript
+// Crea l'istanza del chat
+const chatInstance = createChat({
+  webhookUrl: 'YOUR_WEBHOOK_URL'
+});
+
+// Smonta il widget
+chatInstance.unmount();
+```
+
+## Struttura del Progetto
+
+```
+├── src/
+│   ├── components/       # Componenti Vue
+│   ├── composables/      # Composable functions
+│   ├── plugins/          # Plugin Vue
+│   ├── utils/            # Utility e funzioni di supporto
+│   ├── scss/             # File SCSS e variabili
+│   ├── main.ts           # Entry point
+│   └── types.ts          # Type definitions
+├── dist/                 # Build output
+├── vite.config.ts        # Configurazione Vite
+└── package.json
+```
+
+## Browser Supportati
+
+- Chrome/Edge (ultime 2 versioni)
+- Firefox (ultime 2 versioni)
+- Safari (ultime 2 versioni)
 
 ## Licenza
 
