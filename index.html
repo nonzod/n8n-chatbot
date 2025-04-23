@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Chat N8N - Development</title>
+  <title>Tourtools Chat N8N - Development</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
@@ -43,13 +43,19 @@
 </head>
 <body>
   <div class="container">
-    <h1>Simple Chat N8N - Development Environment</h1>
+    <h1>Development Environment</h1>
     
     <div class="options-panel">
-      <h2>Chat Configuration</h2>
-      <p>This is a development page for testing the chat widget. Click the button below to initialize the chat with default options.</p>
+      <h2>Configurazione</h2>
+      <p>Modificare le opzioni di <strong>createChat()</strong> per testare le opzioni</p>
+      <p>Eseguire l'ambiente di dev con 
+        <code>npm run dev</code>
+      </p>
+      <p>
+        Il workflow di test utilizza i comandi speciali markdown e action
+      </p>
       
-      <button id="initChat">Initialize Chat</button>
+      <button id="initChat">Inizializza la chat</button>
     </div>
     
     <div id="tt-chat-n8n"></div>
@@ -65,7 +71,10 @@
       createChat({
         webhookUrl: DEMO_WEBHOOK_URL,
         mode: 'window',
-        initialMessages: ['Ciao', 'Come posso aiutarti oggi?'],
+        title: 'Chat',
+        subtitle: 'Come posso aiutarti?',
+        placeholder: 'Scrivi un messaggio...',
+        initialMessages: ['Sono qui per aiutarti con domande relative ai servizi che TourTools può offrirti.', 'Quali obiettivi di marketing possiamo aiutarti a raggiungere?'],
         loadPreviousSession: true
       });
     });

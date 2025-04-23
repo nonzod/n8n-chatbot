@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="116px" height="120px" viewBox="0 0 116 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>logoTT</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.2">
+        <g id="ChatBOT" transform="translate(-1474, -681)">
+            <g id="Group-5-Copy" transform="translate(1192, 680)">
+                <g id="Group-7" transform="translate(1, 1)">
+                    <g id="logoTT" transform="translate(281, 0)">
+                        <polygon id="Fill-1" fill="#FFBB2C" points="89 22 116 22 116 0 89 0"></polygon>
+                        <path d="M30.8086314,0 L30.8086314,22.414809 L58.4573796,22.414809 L58.4573796,92.2952943 L84,92.2952943 L84,33.2264352 L84,22.414809 L84,0 L30.8086314,0 Z M0,27.7047057 L0,50.1192838 L27.6487481,50.1192838 L27.6487481,120 L53.191138,120 L53.191138,60.931141 L53.191138,50.1192838 L53.191138,27.7047057 L0,27.7047057 Z" id="Fill-2" fill="#FFFFFF"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

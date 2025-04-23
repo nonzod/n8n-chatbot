@@ -69,6 +69,7 @@ onMounted(async () => {
     <div class="tt-chat-header">
       <h2>{{ title }}</h2>
       <p>{{ subtitle }}</p>
+      <img :src="'resources/images/header_logo.svg'" alt="Logo" class="tt-chat-header-logo" />
     </div>
     
     <div ref="chatBodyRef" class="tt-chat-body">
@@ -109,6 +110,7 @@ onMounted(async () => {
   font-family: var(--tt-chat-font-family);
   
   &-header {
+    position: relative;
     padding: 15px;
     background-color: var(--tt-chat-header-bg, #f5f5f5);
     border-bottom: 1px solid var(--tt-chat-light-shade-100);
@@ -124,6 +126,12 @@ onMounted(async () => {
       margin: 0;
       font-size: 0.9em;
       color: var(--tt-chat-subheader-color, #666);
+    }
+
+    &-logo {
+      position: absolute;
+      right: 0;
+      top: 0;
     }
   }
   
