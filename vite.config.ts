@@ -47,6 +47,15 @@ export default defineConfig(({ command }) => {
             exports: 'named',
           },
         },
+        // Specificare esplicitamente terser come minifier
+        minify: 'terser',
+        terserOptions: {
+          compress: {
+            drop_console: true,
+            drop_debugger: true,
+            pure_funcs: ['console.log', 'console.error', 'console.warn', 'console.info', 'console.debug'],
+          },
+        },
       },
     };
   }

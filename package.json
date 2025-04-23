@@ -28,6 +28,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "terser": "^5.39.0",
     "vue": "^3.3.0"
   },
   "devDependencies": {

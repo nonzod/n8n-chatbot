@@ -92,7 +92,7 @@ export const ChatPlugin: Plugin = {
             return {
               id: `${index}-${generateId()}`,
               text: messageContent,
-              sender: sender,
+              sender: sender as 'user' | 'bot',
               createdAt: timestamp,
             };
           });
