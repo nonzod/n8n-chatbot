@@ -60,7 +60,7 @@ export const ChatPlugin: Plugin = {
      */
     async function loadPreviousSessionHandler(): Promise<string | undefined> {
       if (!resolvedOptions.value.loadPreviousSession) {
-        return;
+        return await startNewSession();
       }
       
       // Recupera l'ID di sessione da localStorage o crea un nuovo ID
@@ -76,34 +76,50 @@ export const ChatPlugin: Plugin = {
         const timestamp = new Date().toISOString();
         
         // Converte i messaggi nel formato corretto
-        messages.value = (previousMessagesResponse?.data || []).map((message, index) => ({
+        const loadedMessages = (previousMessagesResponse?.data || []).map((message, index) => ({
           id: `${index}`,
           text: message.kwargs.content,
           sender: message.id.includes('HumanMessage') ? 'user' : 'bot',
           createdAt: timestamp,
         }));
         
-        // Se ci sono messaggi, imposta l'ID di sessione
-        if (messages.value.length) {
+        // Se ci sono messaggi caricati, li aggiungiamo all'elenco
+        if (loadedMessages.length) {
+          messages.value = loadedMessages;
           currentSessionId.value = sessionId;
+          
+          // Salva l'ID di sessione in localStorage
+          localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, sessionId);
+        } 
+        // Se non ci sono messaggi ma abbiamo messaggi iniziali, avvia una nuova sessione
+        else if (initialMessages.value.length > 0) {
+          return await startNewSession();
         }
         
         return sessionId;
       } catch (error) {
         console.error('Failed to load previous session:', error);
-        return undefined;
+        // In caso di errore, avvia una nuova sessione
+        return await startNewSession();
       }
     }
     
     /**
      * Inizia una nuova sessione
      */
-    async function startNewSession(): Promise<void> {
+    async function startNewSession(): Promise<string> {
       const newSessionId = generateId();
       currentSessionId.value = newSessionId;
       
       // Salva l'ID di sessione in localStorage
       localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, newSessionId);
+      
+      // Aggiungi i messaggi iniziali se presenti
+      if (initialMessages.value.length > 0) {
+        messages.value = [...initialMessages.value];
+      }
+      
+      return newSessionId;
     }
     
     /**

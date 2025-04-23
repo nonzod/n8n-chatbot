@@ -7,10 +7,10 @@ const input = ref('');
 const files = ref<FileList | null>(null);
 const chatStore = useChat();
 const options = useOptions();
-const { waitingForResponse } = chatStore;
+const { waitingForResponse, currentSessionId, startNewSession, sendMessage } = chatStore;
 
 const isSubmitDisabled = computed(() => {
-  return input.value === '' || waitingForResponse.value;
+  return input.value.trim() === '' || waitingForResponse.value;
 });
 
 const placeholder = computed(() => {
@@ -26,11 +26,25 @@ async function onSubmit() {
     return;
   }
 
-  const messageText = input.value;
+  const messageText = input.value.trim();
   input.value = '';
   
-  await chatStore.sendMessage(messageText, Array.from(files.value || []));
-  files.value = null;
+  // Verifica se è necessario inizializzare una sessione prima di inviare un messaggio
+  if (!currentSessionId.value && startNewSession) {
+    try {
+      console.log("Inizializzazione sessione prima di inviare il messaggio");
+      await startNewSession();
+    } catch (error) {
+      console.error("Errore durante l'inizializzazione della sessione:", error);
+    }
+  }
+  
+  try {
+    await sendMessage(messageText, Array.from(files.value || []));
+    files.value = null;
+  } catch (error) {
+    console.error("Errore durante l'invio del messaggio:", error);
+  }
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -97,7 +111,6 @@ function adjustHeight(event: Event) {
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-top: 1px solid #e0e0e0;
   padding: 10px;
 }
 

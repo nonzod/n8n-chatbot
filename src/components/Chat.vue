@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, computed } from 'vue';
+import { ref, onMounted, nextTick, computed, watch } from 'vue';
 import ChatMessage from './ChatMessage.vue';
 import ChatInput from './ChatInput.vue';
 import { useChat } from '../composables/useChat';
@@ -23,26 +23,39 @@ function scrollToBottom() {
   });
 }
 
+// Osservatore per scorrere in fondo quando arrivano nuovi messaggi
+watch(messages, () => {
+  scrollToBottom();
+}, { deep: true });
+
 // Inizializzazione della chat
 onMounted(async () => {
-  // Se c'è una sessione precedente, caricala
-  if (options.value?.loadPreviousSession !== false && chatStore.loadPreviousSession) {
-    await chatStore.loadPreviousSession();
-  } 
-  // Altrimenti, inizia una nuova sessione
-  else if (chatStore.startNewSession) {
-    await chatStore.startNewSession();
-  }
-  
-  scrollToBottom();
-  
-  // Osservatore per scorrere in fondo quando arrivano nuovi messaggi
-  const observer = new MutationObserver(scrollToBottom);
-  if (chatBodyRef.value) {
-    observer.observe(chatBodyRef.value, {
-      childList: true,
-      subtree: true
-    });
+  try {
+    // Se c'è una sessione precedente, caricala
+    if (options.value?.loadPreviousSession !== false && chatStore.loadPreviousSession) {
+      await chatStore.loadPreviousSession();
+      console.log("Sessione caricata:", currentSessionId.value);
+    } 
+    // Se non è possibile caricare una sessione precedente, avvia una nuova sessione
+    else if (chatStore.startNewSession) {
+      await chatStore.startNewSession();
+      console.log("Nuova sessione avviata:", currentSessionId.value);
+    }
+
+    // Nel caso in cui non sia stato ancora impostato l'ID di sessione, forzane la creazione
+    if (!currentSessionId.value && chatStore.startNewSession) {
+      await chatStore.startNewSession();
+      console.log("Sessione forzata:", currentSessionId.value);
+    }
+    
+    // Scorri in fondo alla chat dopo l'inizializzazione
+    scrollToBottom();
+  } catch (error) {
+    console.error('Error initializing chat:', error);
+    // In caso di errore, tenta di iniziare una nuova sessione
+    if (chatStore.startNewSession) {
+      await chatStore.startNewSession();
+    }
   }
 });
 </script>
@@ -76,7 +89,8 @@ onMounted(async () => {
     </div>
     
     <div class="simple-chat-footer">
-      <ChatInput v-if="currentSessionId" />
+      <!-- L'input è sempre visibile -->
+      <ChatInput />
     </div>
   </div>
 </template>
