@@ -1,6 +1,7 @@
 {
   "name": "tt-chat-n8n",
   "version": "0.3.0",
+  "type": "module",
   "description": "A simplified chat widget for n8n",
   "author": {
     "name": "Nicola Tomassoni",
