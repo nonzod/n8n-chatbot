@@ -7,7 +7,7 @@ import { ChatPlugin } from './plugins';
 import AppComponent from './App.vue';
 
 // Opzioni di default
-const DEFAULT_TARGET = '#simple-chat-n8n';
+const DEFAULT_TARGET = '#tt-chat-n8n';
 
 // Tracking dell'istanza dell'app per evitare istanze multiple
 let currentAppInstance: ReturnType<typeof createApp> | null = null;

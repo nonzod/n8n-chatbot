@@ -22,17 +22,17 @@ function toggleChat() {
 </script>
 
 <template>
-  <div class="simple-chat-toggle" @click="toggleChat">
-    <img :src="iconPath" alt="Toggle chat" class="simple-chat-toggle-icon" />
+  <div class="tt-chat-toggle" @click="toggleChat">
+    <img :src="iconPath" alt="Toggle chat" class="tt-chat-toggle-icon" />
   </div>
 </template>
 
 <style scoped>
-.simple-chat-toggle {
+.tt-chat-toggle {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: var(--simple-chat-primary-color, #2196f3);
+  background-color: var(--tt-chat-primary-color, #2196f3);
   color: white;
   display: flex;
   justify-content: center;
@@ -42,13 +42,12 @@ function toggleChat() {
   transition: transform 0.2s;
 }
 
-.simple-chat-toggle:hover {
+.tt-chat-toggle:hover {
   transform: scale(1.05);
 }
 
-.simple-chat-toggle-icon {
+.tt-chat-toggle-icon {
   width: 24px;
   height: 24px;
-  filter: invert(1); /* Per rendere l'icona bianca se è nera nell'SVG */
 }
 </style>

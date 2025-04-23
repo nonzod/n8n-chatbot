@@ -5,7 +5,7 @@ import type {
 } from '../types';
 
 // Costante per l'ID della sessione in localStorage
-export const LOCAL_STORAGE_SESSION_KEY = 'simple-chat-n8n-session-id';
+export const LOCAL_STORAGE_SESSION_KEY = 'tt-chat-n8n-session-id';
 
 /**
  * Funzione per fare richieste API autenticate

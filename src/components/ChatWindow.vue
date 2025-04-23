@@ -11,9 +11,9 @@ function toggleChat() {
 </script>
 
 <template>
-  <div class="simple-chat-window-wrapper">
-    <transition name="simple-chat-window-transition">
-      <div v-if="isOpen" class="simple-chat-window">
+  <div class="tt-chat-window-wrapper">
+    <transition name="tt-chat-window-transition">
+      <div v-if="isOpen" class="tt-chat-window">
         <Chat />
       </div>
     </transition>
@@ -23,7 +23,7 @@ function toggleChat() {
 </template>
 
 <style scoped>
-.simple-chat-window-wrapper {
+.tt-chat-window-wrapper {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -33,7 +33,7 @@ function toggleChat() {
   align-items: flex-end;
 }
 
-.simple-chat-window {
+.tt-chat-window {
   width: 350px;
   height: 500px;
   background: white;
@@ -44,13 +44,13 @@ function toggleChat() {
 }
 
 /* Transitions */
-.simple-chat-window-transition-enter-active,
-.simple-chat-window-transition-leave-active {
+.tt-chat-window-transition-enter-active,
+.tt-chat-window-transition-leave-active {
   transition: opacity 0.3s, transform 0.3s;
 }
 
-.simple-chat-window-transition-enter-from,
-.simple-chat-window-transition-leave-to {
+.tt-chat-window-transition-enter-from,
+.tt-chat-window-transition-leave-to {
   opacity: 0;
   transform: translateY(20px) scale(0.9);
 }

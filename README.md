@@ -39,7 +39,7 @@ Una versione semplificata del widget di chat per n8n, implementata con Vue 3 e T
 ## Installazione
 
 ```bash
-npm install simple-chat-n8n
+npm install tt-chat-n8n
 ```
 
 ## Utilizzo
@@ -47,9 +47,9 @@ npm install simple-chat-n8n
 ### Inclusione tramite CDN
 
 ```html
-<link href="https://cdn.jsdelivr.net/npm/simple-chat-n8n/dist/style.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tt-chat-n8n/dist/style.css" rel="stylesheet">
 <script type="module">
-  import { createChat } from 'https://cdn.jsdelivr.net/npm/simple-chat-n8n/dist/simple-chat.es.js';
+  import { createChat } from 'https://cdn.jsdelivr.net/npm/tt-chat-n8n/dist/tt-chat.es.js';
 
   createChat({
     webhookUrl: 'YOUR_N8N_WEBHOOK_URL'
@@ -60,8 +60,8 @@ npm install simple-chat-n8n
 ### Inclusione tramite NPM
 
 ```javascript
-import { createChat } from 'simple-chat-n8n';
-import 'simple-chat-n8n/style.css';
+import { createChat } from 'tt-chat-n8n';
+import 'tt-chat-n8n/style.css';
 
 createChat({
   webhookUrl: 'YOUR_N8N_WEBHOOK_URL'
@@ -82,7 +82,7 @@ createChat({
   },
   
   // Opzionale: Selettore CSS o elemento DOM dove montare la chat
-  target: '#simple-chat-n8n',
+  target: '#tt-chat-n8n',
   
   // Opzionale: Modalità di visualizzazione
   mode: 'window', // 'window' o 'fullscreen'
@@ -139,14 +139,14 @@ Il widget può essere personalizzato tramite le variabili CSS:
 
 ```css
 :root {
-  --simple-chat-primary-color: #2196f3;
-  --simple-chat-bg: #ffffff;
-  --simple-chat-user-bg: #e0f7fa;
-  --simple-chat-bot-bg: #f5f5f5;
-  --simple-chat-user-color: #000000;
-  --simple-chat-bot-color: #000000;
-  --simple-chat-header-bg: #f5f5f5;
-  --simple-chat-header-color: #333333;
+  --tt-chat-primary-color: #2196f3;
+  --tt-chat-bg: #ffffff;
+  --tt-chat-user-bg: #e0f7fa;
+  --tt-chat-bot-bg: #f5f5f5;
+  --tt-chat-user-color: #000000;
+  --tt-chat-bot-color: #000000;
+  --tt-chat-header-bg: #f5f5f5;
+  --tt-chat-header-color: #333333;
 }
 ```
 

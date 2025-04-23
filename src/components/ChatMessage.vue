@@ -8,8 +8,8 @@ const props = defineProps<{
 
 const classes = computed(() => {
   return {
-    'simple-chat-message-from-user': props.message.sender === 'user',
-    'simple-chat-message-from-bot': props.message.sender === 'bot',
+    'tt-chat-message-from-user': props.message.sender === 'user',
+    'tt-chat-message-from-bot': props.message.sender === 'bot',
   };
 });
 
@@ -51,23 +51,23 @@ function handleButtonClick(url: string) {
 </script>
 
 <template>
-  <div class="simple-chat-message" :class="classes">
-    <div class="simple-chat-message-content" v-html="formattedText"></div>
+  <div class="tt-chat-message" :class="classes">
+    <div class="tt-chat-message-content" v-html="formattedText"></div>
     
     <!-- Render delle azioni se presenti -->
-    <div v-if="hasActions" class="simple-chat-message-actions">
+    <div v-if="hasActions" class="tt-chat-message-actions">
       <template v-for="(action, index) in message.actions" :key="index">
         <!-- Button -->
         <button 
           v-if="action.type === 'button'" 
-          class="simple-chat-action-button"
+          class="tt-chat-action-button"
           @click="handleButtonClick(action.action)"
         >
           {{ action.label }}
         </button>
         
         <!-- Checkbox -->
-        <div v-else-if="action.type === 'checkbox'" class="simple-chat-action-checkbox">
+        <div v-else-if="action.type === 'checkbox'" class="tt-chat-action-checkbox">
           <input type="checkbox" :id="'action-checkbox-' + index">
           <label :for="'action-checkbox-' + index">
             {{ action.label }}
@@ -77,8 +77,8 @@ function handleButtonClick(url: string) {
       </template>
     </div>
     
-    <div v-if="message.files && message.files.length > 0" class="simple-chat-message-files">
-      <div v-for="file in message.files" :key="file.name" class="simple-chat-message-file">
+    <div v-if="message.files && message.files.length > 0" class="tt-chat-message-files">
+      <div v-for="file in message.files" :key="file.name" class="tt-chat-message-file">
         {{ file.name }}
       </div>
     </div>
@@ -86,7 +86,7 @@ function handleButtonClick(url: string) {
 </template>
 
 <style scoped>
-.simple-chat-message {
+.tt-chat-message {
   display: block;
   position: relative;
   max-width: 80%;
@@ -96,31 +96,31 @@ function handleButtonClick(url: string) {
   word-wrap: break-word;
 }
 
-.simple-chat-message-from-user {
-  background-color: var(--simple-chat-user-bg, #e0f7fa);
-  color: var(--simple-chat-user-color, #000);
+.tt-chat-message-from-user {
+  background-color: var(--tt-chat-user-bg, #e0f7fa);
+  color: var(--tt-chat-user-color, #000);
   margin-left: auto;
   border-bottom-right-radius: 0;
 }
 
-.simple-chat-message-from-bot {
-  background-color: var(--simple-chat-bot-bg, #f5f5f5);
-  color: var(--simple-chat-bot-color, #000);
+.tt-chat-message-from-bot {
+  background-color: var(--tt-chat-bot-bg, #f5f5f5);
+  color: var(--tt-chat-bot-color, #000);
   border-bottom-left-radius: 0;
 }
 
-.simple-chat-message-content {
+.tt-chat-message-content {
   line-height: 1.5;
 }
 
-.simple-chat-message-files {
+.tt-chat-message-files {
   margin-top: 8px;
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
 }
 
-.simple-chat-message-file {
+.tt-chat-message-file {
   font-size: 0.8em;
   padding: 3px 8px;
   background: rgba(0, 0, 0, 0.05);
@@ -128,15 +128,15 @@ function handleButtonClick(url: string) {
 }
 
 /* Stili per le azioni */
-.simple-chat-message-actions {
+.tt-chat-message-actions {
   margin-top: 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.simple-chat-action-button {
-  background-color: var(--simple-chat-primary-color, #2196f3);
+.tt-chat-action-button {
+  background-color: var(--tt-chat-primary-color, #2196f3);
   color: white;
   border: none;
   border-radius: 4px;
@@ -148,32 +148,32 @@ function handleButtonClick(url: string) {
   align-self: flex-start;
 }
 
-.simple-chat-action-button:hover {
-  background-color: var(--simple-chat-primary-color-hover, #1976d2);
+.tt-chat-action-button:hover {
+  background-color: var(--tt-chat-primary-color-hover, #1976d2);
 }
 
-.simple-chat-action-checkbox {
+.tt-chat-action-checkbox {
   display: flex;
   align-items: flex-start;
   gap: 6px;
 }
 
-.simple-chat-action-checkbox input[type="checkbox"] {
+.tt-chat-action-checkbox input[type="checkbox"] {
   margin-top: 3px;
 }
 
-.simple-chat-action-checkbox label {
+.tt-chat-action-checkbox label {
   font-size: 14px;
   line-height: 1.4;
 }
 
-.simple-chat-action-checkbox a {
+.tt-chat-action-checkbox a {
   margin-left: 5px;
-  color: var(--simple-chat-primary-color, #2196f3);
+  color: var(--tt-chat-primary-color, #2196f3);
   text-decoration: none;
 }
 
-.simple-chat-action-checkbox a:hover {
+.tt-chat-action-checkbox a:hover {
   text-decoration: underline;
 }
 </style>

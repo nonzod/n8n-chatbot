@@ -67,7 +67,7 @@ function adjustHeight(event: Event) {
 </script>
 
 <template>
-  <div class="simple-chat-input">
+  <div class="tt-chat-input">
     <textarea
       v-model="input"
       :placeholder="placeholder"
@@ -76,21 +76,21 @@ function adjustHeight(event: Event) {
       :disabled="waitingForResponse"
     ></textarea>
     
-    <div class="simple-chat-input-controls">
+    <div class="tt-chat-input-controls">
       <input
         v-if="allowFileUploads"
         type="file"
         id="file-upload"
         @change="handleFileInput"
         :disabled="waitingForResponse"
-        class="simple-chat-file-input"
+        class="tt-chat-file-input"
       />
-      <label v-if="allowFileUploads" for="file-upload" class="simple-chat-file-button">
+      <label v-if="allowFileUploads" for="file-upload" class="tt-chat-file-button">
         📎
       </label>
       
       <button 
-        class="simple-chat-send-button" 
+        class="tt-chat-send-button" 
         @click="onSubmit" 
         :disabled="isSubmitDisabled"
       >
@@ -98,8 +98,8 @@ function adjustHeight(event: Event) {
       </button>
     </div>
     
-    <div v-if="files && files.length > 0" class="simple-chat-files-preview">
-      <div v-for="(file, index) in Array.from(files)" :key="index" class="simple-chat-file-preview">
+    <div v-if="files && files.length > 0" class="tt-chat-files-preview">
+      <div v-for="(file, index) in Array.from(files)" :key="index" class="tt-chat-file-preview">
         {{ file.name }}
       </div>
     </div>
@@ -107,7 +107,7 @@ function adjustHeight(event: Event) {
 </template>
 
 <style scoped>
-.simple-chat-input {
+.tt-chat-input {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -128,15 +128,15 @@ textarea {
   line-height: 1.4;
 }
 
-.simple-chat-input-controls {
+.tt-chat-input-controls {
   display: flex;
   align-items: center;
   margin-top: 8px;
 }
 
-.simple-chat-send-button {
+.tt-chat-send-button {
   border: none;
-  background: var(--simple-chat-primary-color, #2196f3);
+  background: var(--tt-chat-primary-color, #2196f3);
   color: white;
   border-radius: 50%;
   width: 32px;
@@ -148,16 +148,16 @@ textarea {
   margin-left: auto;
 }
 
-.simple-chat-send-button:disabled {
+.tt-chat-send-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.simple-chat-file-input {
+.tt-chat-file-input {
   display: none;
 }
 
-.simple-chat-file-button {
+.tt-chat-file-button {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -169,14 +169,14 @@ textarea {
   margin-right: 8px;
 }
 
-.simple-chat-files-preview {
+.tt-chat-files-preview {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
   margin-top: 8px;
 }
 
-.simple-chat-file-preview {
+.tt-chat-file-preview {
   font-size: 12px;
   padding: 3px 8px;
   background: #f0f0f0;

@@ -1,14 +1,14 @@
 {
-  "name": "simple-chat-n8n",
+  "name": "tt-chat-n8n",
   "version": "0.1.0",
   "description": "A simplified chat widget for n8n",
-  "main": "dist/simple-chat.umd.js",
-  "module": "dist/simple-chat.es.js",
+  "main": "dist/tt-chat.umd.js",
+  "module": "dist/tt-chat.es.js",
   "types": "dist/main.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/simple-chat.es.js",
-      "require": "./dist/simple-chat.umd.js",
+      "import": "./dist/tt-chat.es.js",
+      "require": "./dist/tt-chat.umd.js",
       "types": "./dist/main.d.ts"
     },
     "./style.css": {

@@ -33,18 +33,18 @@ export function createMountingElement(target: string): HTMLElement {
  */
 export function applyTheme(theme: Record<string, string> = {}): void {
   const themeVars = {
-    '--simple-chat-primary-color': theme.primaryColor || '#2196f3',
-    '--simple-chat-bg': theme.backgroundColor || '#ffffff',
-    '--simple-chat-user-bg': theme.userMessageColor || '#e0f7fa',
-    '--simple-chat-bot-bg': theme.botMessageColor || '#f5f5f5',
-    '--simple-chat-user-color': theme.userTextColor || '#000000',
-    '--simple-chat-bot-color': theme.botTextColor || '#000000',
-    '--simple-chat-header-bg': theme.headerColor || '#f5f5f5',
-    '--simple-chat-header-color': theme.headerTextColor || '#333333',
+    '--tt-chat-primary-color': theme.primaryColor || '#2196f3',
+    '--tt-chat-bg': theme.backgroundColor || '#ffffff',
+    '--tt-chat-user-bg': theme.userMessageColor || '#e0f7fa',
+    '--tt-chat-bot-bg': theme.botMessageColor || '#f5f5f5',
+    '--tt-chat-user-color': theme.userTextColor || '#000000',
+    '--tt-chat-bot-color': theme.botTextColor || '#000000',
+    '--tt-chat-header-bg': theme.headerColor || '#f5f5f5',
+    '--tt-chat-header-color': theme.headerTextColor || '#333333',
   };
   
   const style = document.createElement('style');
-  style.setAttribute('id', 'simple-chat-theme');
+  style.setAttribute('id', 'tt-chat-theme');
   
   const cssVariables = Object.entries(themeVars)
     .map(([key, value]) => `${key}: ${value};`)
@@ -53,7 +53,7 @@ export function applyTheme(theme: Record<string, string> = {}): void {
   style.textContent = `:root {\n${cssVariables}\n}`;
   
   // Rimuove lo stile precedente se esiste
-  const existingStyle = document.getElementById('simple-chat-theme');
+  const existingStyle = document.getElementById('tt-chat-theme');
   if (existingStyle) {
     existingStyle.remove();
   }

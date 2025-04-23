@@ -9,7 +9,7 @@ const mode = computed(() => options.value?.mode || 'window');
 </script>
 
 <template>
-  <div class="simple-chat-app">
+  <div class="tt-chat-app">
     <Chat v-if="mode === 'fullscreen'" />
     <ChatWindow v-else />
   </div>
@@ -22,7 +22,7 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
 }
 
-.simple-chat-app {
+.tt-chat-app {
   width: 100%;
   height: 100%;
 }

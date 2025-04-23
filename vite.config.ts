@@ -25,7 +25,7 @@ export default defineConfig(({ command }) => {
         lib: {
           entry: resolve(__dirname, 'src/main.ts'),
           name: 'SimpleChatN8N',
-          fileName: (format) => `simple-chat.${format}.js`,
+          fileName: (format) => `tt-chat.${format}.js`,
         },
         rollupOptions: {
           // Assicurati che le dipendenze esterne non siano incluse nel bundle
