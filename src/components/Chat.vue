@@ -99,81 +99,81 @@ onMounted(async () => {
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .tt-chat {
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
   background-color: var(--tt-chat-bg, #fff);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-}
-
-.tt-chat-header {
-  padding: 15px;
-  background-color: var(--tt-chat-header-bg, #f5f5f5);
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.tt-chat-header h2 {
-  margin: 0 0 5px 0;
-  font-size: 1.2em;
-  font-weight: 600;
-  color: var(--tt-chat-header-color, #333);
-}
-
-.tt-chat-header p {
-  margin: 0;
-  font-size: 0.9em;
-  color: var(--tt-chat-subheader-color, #666);
-}
-
-.tt-chat-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-}
-
-.tt-chat-empty {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  color: #888;
-  font-style: italic;
-}
-
-.tt-chat-footer {
-  border-top: 1px solid #e0e0e0;
-}
-
-.tt-chat-typing {
-  display: flex;
-  padding: 10px;
-  max-width: 60px;
-  background-color: var(--tt-chat-bot-bg, #f5f5f5);
-  border-radius: 10px;
-  margin-bottom: 10px;
-  align-self: flex-start;
-}
-
-.tt-chat-typing-dot {
-  width: 8px;
-  height: 8px;
-  background: #888;
-  border-radius: 50%;
-  margin: 0 3px;
-  animation: tt-chat-typing 1s infinite;
-}
-
-.tt-chat-typing-dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.tt-chat-typing-dot:nth-child(3) {
-  animation-delay: 0.4s;
+  font-family: var(--tt-chat-font-family);
+  
+  &-header {
+    padding: 15px;
+    background-color: var(--tt-chat-header-bg, #f5f5f5);
+    border-bottom: 1px solid var(--tt-chat-light-shade-100);
+    
+    h2 {
+      margin: 0 0 5px 0;
+      font-size: 1.2em;
+      font-weight: 600;
+      color: var(--tt-chat-header-color, #333);
+    }
+    
+    p {
+      margin: 0;
+      font-size: 0.9em;
+      color: var(--tt-chat-subheader-color, #666);
+    }
+  }
+  
+  &-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #888;
+    font-style: italic;
+  }
+  
+  &-footer {
+    border-top: 1px solid var(--tt-chat-light-shade-100);
+  }
+  
+  &-typing {
+    display: flex;
+    padding: 10px;
+    max-width: 60px;
+    background-color: var(--tt-chat-bot-bg, #f5f5f5);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    align-self: flex-start;
+    
+    &-dot {
+      width: 8px;
+      height: 8px;
+      background: #888;
+      border-radius: 50%;
+      margin: 0 3px;
+      animation: tt-chat-typing 1s infinite;
+      
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
 }
 
 @keyframes tt-chat-typing {

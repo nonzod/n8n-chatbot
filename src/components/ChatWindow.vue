@@ -22,7 +22,7 @@ function toggleChat() {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss">
 .tt-chat-window-wrapper {
   position: fixed;
   bottom: 20px;

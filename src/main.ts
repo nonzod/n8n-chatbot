@@ -1,4 +1,4 @@
-import './style.css';
+import './style.scss';
 import { createApp } from 'vue';
 import type { App, Component } from 'vue';
 import type { ChatOptions } from './types';

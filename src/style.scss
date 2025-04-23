@@ -1,0 +1,8 @@
+@use './scss/styles.scss';
+
+/* Stili globali aggiuntivi specifici */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--tt-chat-font-family);
+}

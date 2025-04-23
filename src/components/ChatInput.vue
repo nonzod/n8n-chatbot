@@ -106,7 +106,7 @@ function adjustHeight(event: Event) {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss">
 .tt-chat-input {
   display: flex;
   flex-direction: column;

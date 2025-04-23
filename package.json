@@ -1,6 +1,6 @@
 {
   "name": "tt-chat-n8n",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A simplified chat widget for n8n",
   "main": "dist/tt-chat.umd.js",
   "module": "dist/tt-chat.es.js",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.3.0",
+    "sass": "^1.87.0",
     "typescript": "^5.1.0",
     "vite": "^4.4.0",
     "vite-plugin-dts": "^3.3.0",

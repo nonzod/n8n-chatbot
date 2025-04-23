@@ -85,7 +85,7 @@ function handleButtonClick(url: string) {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss">
 .tt-chat-message {
   display: block;
   position: relative;

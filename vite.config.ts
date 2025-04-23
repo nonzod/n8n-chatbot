@@ -15,6 +15,15 @@ export default defineConfig(({ command }) => {
         '@': resolve(__dirname, 'src'),
       },
     },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // Usare loadPaths invece di additionalData per evitare l'avviso di deprecazione
+          // additionalData funziona ancora ma genera l'avviso
+          loadPaths: [resolve(__dirname, './src/scss')]
+        }
+      }
+    }
   };
 
   // Configurazione specifica per la build della libreria

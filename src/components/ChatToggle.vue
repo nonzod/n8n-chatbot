@@ -27,12 +27,12 @@ function toggleChat() {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss">
 .tt-chat-toggle {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: var(--tt-chat-primary-color, #2196f3);
+  background-color: var(--tt-chat-primary-color, brown);
   color: white;
   display: flex;
   justify-content: center;
