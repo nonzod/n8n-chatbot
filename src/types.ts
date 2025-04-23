@@ -4,6 +4,7 @@ export interface ChatMessage {
   sender: 'user' | 'bot';
   createdAt: string;
   files?: File[];
+  actions?: ChatAction[];
 }
 
 export interface ChatOptions {
@@ -66,4 +67,17 @@ export interface LoadPreviousSessionResponse {
 export interface SendMessageResponse {
   output?: string;
   text?: string;
+}
+
+// Actions
+export interface ChatAction {
+  type: 'button' | 'checkbox';
+  label: string;
+  action: string;
+}
+
+export interface SendMessageResponse {
+  output?: string;
+  text?: string;
+  actions?: ChatAction[];
 }

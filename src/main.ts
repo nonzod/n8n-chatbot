@@ -16,13 +16,13 @@ let currentContainer: Element | null = null;
 /**
  * Crea il widget di chat
  */
-export function createChat(options: ChatOptions): { 
+export function createChat(options: ChatOptions): {
   unmount: () => void;
   _app: ReturnType<typeof createApp>;
   _container: Element;
 } {
   console.log('Creazione del widget di chat con opzioni:', options);
-  
+
   if (!options.webhookUrl) {
     console.error('[SimpleChatN8N] webhookUrl is required');
     throw new Error('webhookUrl is required');
@@ -30,10 +30,10 @@ export function createChat(options: ChatOptions): {
 
   // Target di montaggio
   const target = options.target || DEFAULT_TARGET;
-  const targetElement = typeof target === 'string' 
-    ? createMountingElement(target) 
+  const targetElement = typeof target === 'string'
+    ? createMountingElement(target)
     : target;
-  
+
   // Controlla se c'è già un'istanza attiva per questo target
   if (currentAppInstance && currentContainer === targetElement) {
     console.log('Istanza già esistente per questo target, la riutilizzo');
@@ -43,7 +43,7 @@ export function createChat(options: ChatOptions): {
       _container: targetElement,
     };
   }
-  
+
   // Se esiste un'istanza precedente per un target diverso, la smontiamo
   if (currentAppInstance) {
     console.log('Smontaggio istanza precedente');
@@ -51,27 +51,27 @@ export function createChat(options: ChatOptions): {
     currentAppInstance = null;
     currentContainer = null;
   }
-  
+
   // Applica il tema se fornito
   if (options.theme) {
     applyTheme(options.theme);
   }
-  
+
   // Crea l'app
   const app = createApp(AppComponent as Component);
-  
+
   // Registra il plugin
   app.use(ChatPlugin, options);
-  
+
   // Monta l'app
   app.mount(targetElement);
-  
+
   // Memorizza l'istanza corrente
   currentAppInstance = app;
   currentContainer = targetElement;
-  
+
   console.log('Widget di chat creato e montato su:', targetElement);
-  
+
   return {
     unmount: () => {
       app.unmount();
