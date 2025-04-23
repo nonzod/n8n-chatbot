@@ -11,8 +11,8 @@ const options = useOptions();
 const { messages, currentSessionId, waitingForResponse } = chatStore;
 
 // Computed properties per gli elementi UI
-const title = computed(() => options.value.title || 'Chat');
-const subtitle = computed(() => options.value.subtitle || 'How can I help you today?');
+const title = computed(() => options.value?.title || 'Chat');
+const subtitle = computed(() => options.value?.subtitle || 'How can I help you today?');
 
 // Funzione per scorrere in fondo alla chat
 function scrollToBottom() {
@@ -26,7 +26,7 @@ function scrollToBottom() {
 // Inizializzazione della chat
 onMounted(async () => {
   // Se c'è una sessione precedente, caricala
-  if (options.value.loadPreviousSession !== false && chatStore.loadPreviousSession) {
+  if (options.value?.loadPreviousSession !== false && chatStore.loadPreviousSession) {
     await chatStore.loadPreviousSession();
   } 
   // Altrimenti, inizia una nuova sessione

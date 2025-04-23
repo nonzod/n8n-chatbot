@@ -5,7 +5,7 @@ import ChatWindow from './components/ChatWindow.vue';
 import { useOptions } from './composables/useOptions';
 
 const options = useOptions();
-const mode = computed(() => options.value.mode || 'window');
+const mode = computed(() => options.value?.mode || 'window');
 </script>
 
 <template>

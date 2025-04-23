@@ -14,11 +14,11 @@ const isSubmitDisabled = computed(() => {
 });
 
 const placeholder = computed(() => {
-  return options.value.placeholder || 'Type your message...';
+  return options.value?.placeholder || 'Type your message...';
 });
 
 const allowFileUploads = computed(() => {
-  return options.value.allowFileUploads || false;
+  return options.value?.allowFileUploads || false;
 });
 
 async function onSubmit() {

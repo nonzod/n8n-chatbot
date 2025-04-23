@@ -3,7 +3,8 @@ import { ref, computed } from 'vue';
 
 import { LOCAL_STORAGE_SESSION_KEY, loadPreviousSession, sendMessage } from '../utils/api';
 import { generateId } from '../utils/helpers';
-import { ChatSymbol, OptionsSymbol } from '../composables/useChat';
+import { ChatSymbol } from '../composables/useChat';
+import { OptionsSymbol } from '../composables/useOptions';
 import type { ChatOptions, ChatMessage } from '../types';
 
 /**
