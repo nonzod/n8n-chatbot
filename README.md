@@ -1,7 +1,6 @@
 # Chatbot frontend for N8N
 
 ```txt
-simple-chat-n8n/
 ├── src/
 │   ├── components/
 │   │   ├── Chat.vue            # Componente principale 
@@ -11,6 +10,8 @@ simple-chat-n8n/
 │   ├── composables/
 │   │   ├── useChat.ts          # Logica principale della chat
 │   │   └── useOptions.ts       # Gestione opzioni
+│   ├── plugins/
+│   │   └── chatPlugin.ts       # Plugin Vue per la chat
 │   ├── utils/
 │   │   ├── api.ts              # Chiamate API
 │   │   └── helpers.ts          # Funzioni di utilità

@@ -1,5 +1,5 @@
 {
-  "name": "n8n-chatbot",
+  "name": "simple-chat-n8n",
   "version": "0.1.0",
   "description": "A simplified chat widget for n8n",
   "main": "dist/simple-chat.umd.js",
@@ -18,7 +18,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {
