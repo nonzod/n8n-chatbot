@@ -1,7 +1,12 @@
 {
   "name": "tt-chat-n8n",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A simplified chat widget for n8n",
+  "author": {
+    "name": "Nicola Tomassoni",
+    "email": "n.tomassoni@tourtools.it",
+    "url": "https://www.tourtools.it"
+  },
   "main": "dist/tt-chat.umd.js",
   "module": "dist/tt-chat.es.js",
   "types": "dist/main.d.ts",
@@ -36,5 +41,6 @@
   "files": [
     "dist",
     "README.md"
-  ]
+  ],
+  "license": "MIT"
 }

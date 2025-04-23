@@ -4,6 +4,8 @@ Fork del frontend ufficiale del chatbot N8N
 
 ## Setup Locale
 
+Node version 22
+
 ### Clone e Installazione
 
 ```bash
