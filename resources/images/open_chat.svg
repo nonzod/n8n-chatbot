@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="35px" height="30px" viewBox="0 0 35 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>chat</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ChatBOT-chiuso" transform="translate(-1542, -1022)">
+            <g id="chat" transform="translate(1542, 1022)">
+                <path d="M3.75,0 C1.67925,0 0,1.67925 0,3.75 L0,21.75 L6.82470675,17.25 L20.25,17.25 C22.32075,17.25 24,15.57075 24,13.5 L24,0 L3.75,0 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                <path d="M26.25,7.5 L26.25,13.5 C26.25,16.8075 23.5575,19.5 20.25,19.5 L10.5,19.5 L10.5,21.75 C10.5,23.82 12.18,25.5 14.25,25.5 L27.6752932,25.5 L34.5,30 L34.5,11.25 C34.5,9.18 32.82,7.5 30.75,7.5 L26.25,7.5 Z" id="Path" fill="#F3B83B"></path>
+            </g>
+        </g>
+    </g>
+</svg>
