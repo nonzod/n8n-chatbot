@@ -9,6 +9,10 @@ import AppComponent from './App.vue';
 // Opzioni di default
 const DEFAULT_TARGET = '#simple-chat-n8n';
 
+// Tracking dell'istanza dell'app per evitare istanze multiple
+let currentAppInstance: ReturnType<typeof createApp> | null = null;
+let currentContainer: Element | null = null;
+
 /**
  * Crea il widget di chat
  */
@@ -30,6 +34,24 @@ export function createChat(options: ChatOptions): {
     ? createMountingElement(target) 
     : target;
   
+  // Controlla se c'è già un'istanza attiva per questo target
+  if (currentAppInstance && currentContainer === targetElement) {
+    console.log('Istanza già esistente per questo target, la riutilizzo');
+    return {
+      unmount: () => currentAppInstance?.unmount(),
+      _app: currentAppInstance,
+      _container: targetElement,
+    };
+  }
+  
+  // Se esiste un'istanza precedente per un target diverso, la smontiamo
+  if (currentAppInstance) {
+    console.log('Smontaggio istanza precedente');
+    currentAppInstance.unmount();
+    currentAppInstance = null;
+    currentContainer = null;
+  }
+  
   // Applica il tema se fornito
   if (options.theme) {
     applyTheme(options.theme);
@@ -44,10 +66,18 @@ export function createChat(options: ChatOptions): {
   // Monta l'app
   app.mount(targetElement);
   
+  // Memorizza l'istanza corrente
+  currentAppInstance = app;
+  currentContainer = targetElement;
+  
   console.log('Widget di chat creato e montato su:', targetElement);
   
   return {
-    unmount: () => app.unmount(),
+    unmount: () => {
+      app.unmount();
+      currentAppInstance = null;
+      currentContainer = null;
+    },
     _app: app,
     _container: targetElement,
   };

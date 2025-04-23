@@ -11,6 +11,7 @@ export const LOCAL_STORAGE_SESSION_KEY = 'simple-chat-n8n-session-id';
  * Funzione per fare richieste API autenticate
  */
 async function fetchApi<T>(url: string, options: RequestInit = {}): Promise<T> {
+  console.log("Calling API:", url, options);
   const response = await fetch(url, {
     mode: 'cors',
     cache: 'no-cache',
@@ -21,7 +22,9 @@ async function fetchApi<T>(url: string, options: RequestInit = {}): Promise<T> {
     throw new Error(`API request failed with status ${response.status}`);
   }
   
-  return await response.json() as T;
+  const result = await response.json() as T;
+  console.log("API Response:", result);
+  return result;
 }
 
 /**
@@ -31,6 +34,8 @@ export async function loadPreviousSession(
   sessionId: string, 
   options: ChatOptions
 ): Promise<LoadPreviousSessionResponse> {
+  console.log("Loading previous session with ID:", sessionId);
+  
   const method = options.webhookConfig?.method === 'POST' ? 'POST' : 'GET';
   const body = {
     action: 'loadPreviousSession',

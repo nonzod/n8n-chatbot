@@ -31,21 +31,25 @@ watch(messages, () => {
 // Inizializzazione della chat
 onMounted(async () => {
   try {
+    console.log("Chat component mounted, initializing...");
     // Se c'è una sessione precedente, caricala
     if (options.value?.loadPreviousSession !== false && chatStore.loadPreviousSession) {
+      console.log("Attempting to load previous session...");
       await chatStore.loadPreviousSession();
-      console.log("Sessione caricata:", currentSessionId.value);
+      console.log("Session loaded:", currentSessionId.value, "Messages:", messages.value.length);
     } 
     // Se non è possibile caricare una sessione precedente, avvia una nuova sessione
     else if (chatStore.startNewSession) {
+      console.log("Starting new session...");
       await chatStore.startNewSession();
-      console.log("Nuova sessione avviata:", currentSessionId.value);
+      console.log("New session started:", currentSessionId.value);
     }
 
     // Nel caso in cui non sia stato ancora impostato l'ID di sessione, forzane la creazione
     if (!currentSessionId.value && chatStore.startNewSession) {
+      console.log("Forcing new session creation...");
       await chatStore.startNewSession();
-      console.log("Sessione forzata:", currentSessionId.value);
+      console.log("Forced session:", currentSessionId.value);
     }
     
     // Scorri in fondo alla chat dopo l'inizializzazione

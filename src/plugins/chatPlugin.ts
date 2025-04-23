@@ -65,6 +65,7 @@ export const ChatPlugin: Plugin = {
       
       // Recupera l'ID di sessione da localStorage o crea un nuovo ID
       const sessionId = localStorage.getItem(LOCAL_STORAGE_SESSION_KEY) || generateId();
+      console.log("Trovato sessionId:", sessionId);
       
       try {
         // Carica i messaggi precedenti
@@ -73,32 +74,53 @@ export const ChatPlugin: Plugin = {
           resolvedOptions.value
         );
         
-        const timestamp = new Date().toISOString();
+        console.log("Risposta caricamento sessione:", previousMessagesResponse);
         
-        // Converte i messaggi nel formato corretto
-        const loadedMessages = (previousMessagesResponse?.data || []).map((message, index) => ({
-          id: `${index}`,
-          text: message.kwargs.content,
-          sender: message.id.includes('HumanMessage') ? 'user' : 'bot',
-          createdAt: timestamp,
-        }));
-        
-        // Se ci sono messaggi caricati, li aggiungiamo all'elenco
-        if (loadedMessages.length) {
-          messages.value = loadedMessages;
-          currentSessionId.value = sessionId;
+        // Verifica che ci siano dati nella risposta
+        if (previousMessagesResponse?.data && Array.isArray(previousMessagesResponse.data) && previousMessagesResponse.data.length > 0) {
+          const timestamp = new Date().toISOString();
           
-          // Salva l'ID di sessione in localStorage
-          localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, sessionId);
-        } 
-        // Se non ci sono messaggi ma abbiamo messaggi iniziali, avvia una nuova sessione
-        else if (initialMessages.value.length > 0) {
+          // Trasforma i messaggi nel formato corretto per l'UI
+          const loadedMessages = previousMessagesResponse.data.map((message, index) => {
+            // Verifica che message.kwargs.content esista
+            const messageContent = message.kwargs?.content || "Messaggio vuoto";
+            // Determina il sender basandosi sull'id del messaggio, che può essere una stringa o un array
+            const sender = Array.isArray(message.id)
+              ? (message.id.some(id => String(id).includes('HumanMessage')) ? 'user' : 'bot')
+              : (String(message.id).includes('HumanMessage') ? 'user' : 'bot');
+            
+            return {
+              id: `${index}-${generateId()}`,
+              text: messageContent,
+              sender: sender,
+              createdAt: timestamp,
+            };
+          });
+          
+          console.log("Messaggi caricati:", loadedMessages);
+          
+          // Imposta i messaggi e l'ID di sessione
+          if (loadedMessages.length > 0) {
+            messages.value = loadedMessages;
+            currentSessionId.value = sessionId;
+            
+            // Salva l'ID di sessione in localStorage
+            localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, sessionId);
+            
+            console.log("Sessione caricata con successo, messaggi:", messages.value.length);
+            return sessionId;
+          }
+        }
+        
+        // Se non ci sono messaggi caricati ma abbiamo messaggi iniziali, avvia una nuova sessione
+        if (initialMessages.value.length > 0) {
+          console.log("Nessun messaggio trovato, avvio nuova sessione");
           return await startNewSession();
         }
         
         return sessionId;
       } catch (error) {
-        console.error('Failed to load previous session:', error);
+        console.error('Errore durante il caricamento della sessione precedente:', error);
         // In caso di errore, avvia una nuova sessione
         return await startNewSession();
       }
@@ -117,8 +139,12 @@ export const ChatPlugin: Plugin = {
       // Aggiungi i messaggi iniziali se presenti
       if (initialMessages.value.length > 0) {
         messages.value = [...initialMessages.value];
+      } else {
+        // Pulisci i messaggi esistenti
+        messages.value = [];
       }
       
+      console.log("Nuova sessione avviata:", newSessionId);
       return newSessionId;
     }
     

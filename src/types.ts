@@ -1,5 +1,3 @@
-import type { Component, Ref } from 'vue';
-
 export interface ChatMessage {
   id: string;
   text: string;
@@ -54,10 +52,10 @@ export interface Chat {
 
 // API response types
 export interface LoadPreviousSessionResponseItem {
-  id: string[];
+  id: string | string[];
   kwargs: {
     content: string;
-    additional_kwargs: Record<string, unknown>;
+    additional_kwargs?: Record<string, unknown>;
   };
 }
 
