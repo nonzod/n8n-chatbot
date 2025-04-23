@@ -97,7 +97,6 @@ function adjustHeight(event: Event) {
   width: 100%;
   padding: 0;
 
-
   textarea {
     resize: none;
     border: none;
