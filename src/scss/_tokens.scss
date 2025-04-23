@@ -6,17 +6,17 @@
   --tt-chat-user-bg: #e0f7fa;
   --tt-chat-bot-bg: #f5f5f5;
   --tt-chat-user-color: #000000;
-  --tt-chat-bot-color: #000000;
+  --tt-chat-bot-color: #044273;
   --tt-chat-header-bg: #044273;
-  --tt-chat-header-color: #333333;
-  --tt-chat-subheader-color: #666666;
+  --tt-chat-header-color: #FFFFFF;
+  --tt-chat-subheader-color: #FEBB2E;
   --tt-chat-light-shade-100: #e0e0e0;
   
   /* Layout base */
   --tt-chat-spacing: 1rem;
   --tt-chat-border-radius: 0.25rem;
   --tt-chat-transition-duration: 0.15s;
-  --tt-chat-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  --tt-chat-font-family: 'Helvetica Neue', sans-serif;
 
   /* Window dimensions */
   --tt-chat-window-width: 350px;
@@ -34,7 +34,7 @@
   /* Messages */
   --tt-chat-message-font-size: 1rem;
   --tt-chat-message-padding: 10px;
-  --tt-chat-message-border-radius: 10px;
+  --tt-chat-message-border-radius: 5px;
   --tt-chat-message-line-height: 1.5;
   
   /* Input */

@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { useChat } from '../composables/useChat';
 import { useOptions } from '../composables/useOptions';
+import ButtonSend from './ButtonSend.vue';
 
 const input = ref('');
 const files = ref<FileList | null>(null);
@@ -28,7 +29,7 @@ async function onSubmit() {
 
   const messageText = input.value.trim();
   input.value = '';
-  
+
   // Verifica se è necessario inizializzare una sessione prima di inviare un messaggio
   if (!currentSessionId.value && startNewSession) {
     try {
@@ -38,7 +39,7 @@ async function onSubmit() {
       console.error("Errore durante l'inizializzazione della sessione:", error);
     }
   }
-  
+
   try {
     await sendMessage(messageText, Array.from(files.value || []));
     files.value = null;
@@ -68,36 +69,19 @@ function adjustHeight(event: Event) {
 
 <template>
   <div class="tt-chat-input">
-    <textarea
-      v-model="input"
-      :placeholder="placeholder"
-      @keydown="onKeydown"
-      @input="adjustHeight"
-      :disabled="waitingForResponse"
-    ></textarea>
-    
+    <textarea v-model="input" :placeholder="placeholder" @keydown="onKeydown" @input="adjustHeight"
+      :disabled="waitingForResponse"></textarea>
+
     <div class="tt-chat-input-controls">
-      <input
-        v-if="allowFileUploads"
-        type="file"
-        id="file-upload"
-        @change="handleFileInput"
-        :disabled="waitingForResponse"
-        class="tt-chat-file-input"
-      />
+      <input v-if="allowFileUploads" type="file" id="file-upload" @change="handleFileInput"
+        :disabled="waitingForResponse" class="tt-chat-file-input" />
       <label v-if="allowFileUploads" for="file-upload" class="tt-chat-file-button">
         📎
       </label>
-      
-      <button 
-        class="tt-chat-send-button" 
-        @click="onSubmit" 
-        :disabled="isSubmitDisabled"
-      >
-        ➤
-      </button>
+
+      <ButtonSend @click="onSubmit" :disabled="isSubmitDisabled" />
     </div>
-    
+
     <div v-if="files && files.length > 0" class="tt-chat-files-preview">
       <div v-for="(file, index) in Array.from(files)" :key="index" class="tt-chat-file-preview">
         {{ file.name }}
@@ -109,78 +93,31 @@ function adjustHeight(event: Event) {
 <style lang="scss">
 .tt-chat-input {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
-  padding: 10px;
-}
+  padding: 0;
 
-textarea {
-  resize: none;
-  border: 1px solid #ddd;
-  border-radius: 18px;
-  padding: 10px 15px;
-  min-height: 40px;
-  max-height: 150px;
-  overflow-y: auto;
-  font-family: inherit;
-  font-size: 14px;
-  outline: none;
-  line-height: 1.4;
-}
 
-.tt-chat-input-controls {
-  display: flex;
-  align-items: center;
-  margin-top: 8px;
-}
+  textarea {
+    resize: none;
+    border: none;
+    padding: 10px 15px;
+    min-height: 40px;
+    max-height: 150px;
+    overflow-y: auto;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    line-height: 1.4;
+    flex: 1;
+  }
 
-.tt-chat-send-button {
-  border: none;
-  background: var(--tt-chat-primary-color, #2196f3);
-  color: white;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
-}
+  .tt-chat-input-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+  }
 
-.tt-chat-send-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.tt-chat-file-input {
-  display: none;
-}
-
-.tt-chat-file-button {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #f5f5f5;
-  margin-right: 8px;
-}
-
-.tt-chat-files-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 8px;
-}
-
-.tt-chat-file-preview {
-  font-size: 12px;
-  padding: 3px 8px;
-  background: #f0f0f0;
-  border-radius: 4px;
-  border: 1px solid #ddd;
 }
 </style>

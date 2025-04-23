@@ -18,9 +18,9 @@ export default defineConfig(({ command }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          // Usare loadPaths invece di additionalData per evitare l'avviso di deprecazione
-          // additionalData funziona ancora ma genera l'avviso
-          loadPaths: [resolve(__dirname, './src/scss')]
+          loadPaths: [resolve(__dirname, './src/scss')],
+          // Specifica l'API moderna di Sass
+          api: "modern"
         }
       }
     }
