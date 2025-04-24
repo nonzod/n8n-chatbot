@@ -74,7 +74,8 @@ export async function sendMessage(
   message: string,
   files: File[],
   sessionId: string,
-  options: ChatOptions
+  options: ChatOptions,
+  privacy?: boolean
 ): Promise<SendMessageResponse> {
   const method = options.webhookConfig?.method === 'POST' ? 'POST' : 'GET';
   const body: Record<string, any> = {
@@ -82,6 +83,11 @@ export async function sendMessage(
     [options.chatSessionKey || 'sessionId']: sessionId,
     [options.chatInputKey || 'chatInput']: message,
   };
+  
+  // Aggiungi il parametro privacy se è stato specificato
+  if (privacy !== undefined) {
+    body.privacy = privacy;
+  }
   
   // Se ci sono file, usa FormData per l'upload
   if (files.length > 0) {

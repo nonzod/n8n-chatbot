@@ -2,13 +2,20 @@
 import { ref, onMounted, nextTick, computed, watch } from 'vue';
 import ChatMessage from './ChatMessage.vue';
 import ChatInput from './ChatInput.vue';
+import ConfirmPrivacy from './ConfirmPrivacy.vue';
 import { useChat } from '../composables/useChat';
 import { useOptions } from '../composables/useOptions';
+import type { ChatAction, ChatMessage as ChatMessageType } from '../types';
 
 const chatBodyRef = ref<HTMLElement | null>(null);
 const chatStore = useChat();
 const options = useOptions();
-const { messages, currentSessionId, waitingForResponse } = chatStore;
+const { messages, currentSessionId, waitingForResponse, sendMessage, startNewSession } = chatStore;
+
+// Stato per controllare la visualizzazione del form privacy
+const showPrivacyForm = ref(false);
+const currentPrivacyAction = ref<ChatAction | null>(null);
+const lastProcessedMessageId = ref<string | null>(null);
 
 // Computed properties per gli elementi UI
 const title = computed(() => options.value?.title || 'Chat');
@@ -23,9 +30,86 @@ function scrollToBottom() {
   });
 }
 
-// Osservatore per scorrere in fondo quando arrivano nuovi messaggi
-watch(messages, () => {
+// Funzione per gestire l'invio di un messaggio standard
+async function handleSendMessage(text: string, files: File[] = []) {
+  if (!currentSessionId.value && startNewSession) {
+    try {
+      await startNewSession();
+    } catch (error) {
+      console.error("Errore durante l'inizializzazione della sessione:", error);
+    }
+  }
+  
+  try {
+    await sendMessage(text, files);
+  } catch (error) {
+    console.error("Errore durante l'invio del messaggio:", error);
+  }
+}
+
+// Funzione per controllare un messaggio per azioni di privacy
+function checkMessageForPrivacyAction(message: ChatMessageType): void {
+  // Se il messaggio è già stato processato, esci
+  if (message.id === lastProcessedMessageId.value) {
+    return;
+  }
+  
+  console.log("Controllo messaggio:", message.id, message);
+  
+  // Se il messaggio contiene azioni, verifica se c'è un'azione di privacy
+  if (message?.actions && Array.isArray(message.actions)) {
+    console.log("Controllo azioni nel messaggio:", message.actions);
+    
+    const privacyAction = message.actions.find(
+      action => action && action.type === 'privacy'
+    );
+    
+    if (privacyAction) {
+      console.log("Trovata azione privacy:", privacyAction);
+      
+      // Salva l'azione e attiva il form di privacy
+      currentPrivacyAction.value = privacyAction;
+      showPrivacyForm.value = true;
+      
+      // Marca questo messaggio come processato
+      lastProcessedMessageId.value = message.id;
+    }
+  }
+}
+
+// Funzione per gestire la conferma di privacy
+async function handlePrivacyConfirm(privacyAccepted: boolean) {
+  console.log("Privacy confermata:", privacyAccepted);
+  
+  if (!currentSessionId.value && startNewSession) {
+    try {
+      await startNewSession();
+    } catch (error) {
+      console.error("Errore durante l'inizializzazione della sessione:", error);
+    }
+  }
+  
+  try {
+    // Invia la risposta di privacy con un messaggio vuoto
+    await sendMessage('', [], privacyAccepted);
+    // Nascondi il form di privacy
+    showPrivacyForm.value = false;
+    currentPrivacyAction.value = null;
+  } catch (error) {
+    console.error("Errore durante l'invio della risposta privacy:", error);
+  }
+}
+
+// Controlla i nuovi messaggi per le azioni di privacy
+watch(messages, (newMessages) => {
   scrollToBottom();
+  
+  // Se ci sono messaggi
+  if (newMessages.length > 0) {
+    // Controlla l'ultimo messaggio
+    const latestMessage = newMessages[newMessages.length - 1];
+    checkMessageForPrivacyAction(latestMessage);
+  }
 }, { deep: true });
 
 // Inizializzazione della chat
@@ -46,10 +130,17 @@ onMounted(async () => {
     }
 
     // Nel caso in cui non sia stato ancora impostato l'ID di sessione, forzane la creazione
-    if (!currentSessionId.value && chatStore.startNewSession) {
+    if (!currentSessionId.value && startNewSession) {
       console.log("Forcing new session creation...");
-      await chatStore.startNewSession();
+      await startNewSession();
       console.log("Forced session:", currentSessionId.value);
+    }
+    
+    // Controlla tutti i messaggi esistenti per azioni di privacy
+    if (messages.value.length > 0) {
+      // Controlla solo l'ultimo messaggio per semplicità
+      const latestMessage = messages.value[messages.value.length - 1];
+      checkMessageForPrivacyAction(latestMessage);
     }
     
     // Scorri in fondo alla chat dopo l'inizializzazione
@@ -94,8 +185,18 @@ onMounted(async () => {
     </div>
     
     <div class="tt-chat-footer">
-      <!-- L'input è sempre visibile -->
-      <ChatInput />
+      <!-- Form di privacy quando richiesto -->
+      <div v-if="showPrivacyForm" class="tt-chat-privacy-container">
+        <ConfirmPrivacy 
+          :privacyUrl="currentPrivacyAction?.action"
+          @confirm="handlePrivacyConfirm"
+        />
+      </div>
+      
+      <!-- Form standard in tutti gli altri casi -->
+      <div v-else class="tt-chat-input-container">
+        <ChatInput @send="handleSendMessage" />
+      </div>
     </div>
   </div>
 </template>
@@ -181,6 +282,14 @@ onMounted(async () => {
         animation-delay: 0.4s;
       }
     }
+  }
+  
+  &-privacy-container {
+    width: 100%;
+  }
+  
+  &-input-container {
+    width: 100%;
   }
 }
 

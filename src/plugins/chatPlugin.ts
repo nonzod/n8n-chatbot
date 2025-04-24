@@ -149,24 +149,27 @@ export const ChatPlugin: Plugin = {
     }
 
     /**
- * Invia un messaggio
- */
-    async function sendMessageHandler(text: string, files: File[] = []): Promise<void> {
+     * Invia un messaggio
+     */
+    async function sendMessageHandler(text: string, files: File[] = [], privacy?: boolean): Promise<void> {
       if (!currentSessionId.value) {
         await startNewSession();
       }
 
-      // Crea il messaggio dell'utente
-      const sentMessage: ChatMessage = {
-        id: generateId(),
-        text,
-        sender: 'user',
-        files,
-        createdAt: new Date().toISOString(),
-      };
+      // Crea il messaggio dell'utente solo se c'è testo da inviare (non per risposte privacy)
+      if (text.trim() !== '') {
+        const sentMessage: ChatMessage = {
+          id: generateId(),
+          text,
+          sender: 'user',
+          files,
+          createdAt: new Date().toISOString(),
+        };
 
-      // Aggiungi il messaggio alla lista
-      messages.value.push(sentMessage);
+        // Aggiungi il messaggio alla lista
+        messages.value.push(sentMessage);
+      }
+      
       waitingForResponse.value = true;
 
       try {
@@ -175,7 +178,8 @@ export const ChatPlugin: Plugin = {
           text,
           files,
           currentSessionId.value as string,
-          resolvedOptions.value
+          resolvedOptions.value,
+          privacy
         );
 
         // Estrai il testo dalla risposta

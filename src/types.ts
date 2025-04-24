@@ -51,7 +51,7 @@ export interface Chat {
   waitingForResponse: Ref<boolean>;
   loadPreviousSession?: () => Promise<string | undefined>;
   startNewSession?: () => Promise<void>;
-  sendMessage: (text: string, files: File[]) => Promise<void>;
+  sendMessage: (text: string, files: File[], privacy?: boolean) => Promise<void>;
 }
 
 // API response types
@@ -74,7 +74,7 @@ export interface SendMessageResponse {
 
 // Actions
 export interface ChatAction {
-  type: 'button' | 'checkbox';
+  type: 'button' | 'checkbox' | 'privacy';
   label: string;
   action: string;
 }

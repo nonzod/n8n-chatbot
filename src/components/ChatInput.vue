@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useChat } from '../composables/useChat';
 import { useOptions } from '../composables/useOptions';
+import { useChat } from '../composables/useChat';
 import ButtonSend from './ButtonSend.vue';
 
 const input = ref('');
 const files = ref<FileList | null>(null);
-const chatStore = useChat();
 const options = useOptions();
-const { waitingForResponse, currentSessionId, startNewSession, sendMessage } = chatStore;
+const { waitingForResponse } = useChat();
+
+const emit = defineEmits<{
+  (e: 'send', text: string, files: File[]): void;
+}>();
 
 const isSubmitDisabled = computed(() => {
   return input.value.trim() === '' || waitingForResponse.value;
@@ -22,30 +25,17 @@ const allowFileUploads = computed(() => {
   return options.value?.allowFileUploads || false;
 });
 
-async function onSubmit() {
+function onSubmit() {
   if (isSubmitDisabled.value) {
     return;
   }
 
   const messageText = input.value.trim();
+  emit('send', messageText, Array.from(files.value || []));
+  
+  // Resetta l'input
   input.value = '';
-
-  // Verifica se è necessario inizializzare una sessione prima di inviare un messaggio
-  if (!currentSessionId.value && startNewSession) {
-    try {
-      console.log("Inizializzazione sessione prima di inviare il messaggio");
-      await startNewSession();
-    } catch (error) {
-      console.error("Errore durante l'inizializzazione della sessione:", error);
-    }
-  }
-
-  try {
-    await sendMessage(messageText, Array.from(files.value || []));
-    files.value = null;
-  } catch (error) {
-    console.error("Errore durante l'invio del messaggio:", error);
-  }
+  files.value = null;
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -69,13 +59,28 @@ function adjustHeight(event: Event) {
 
 <template>
   <div class="tt-chat-input">
-    <textarea v-model="input" :placeholder="placeholder" @keydown="onKeydown" @input="adjustHeight"
-      :disabled="waitingForResponse"></textarea>
+    <textarea 
+      v-model="input" 
+      :placeholder="placeholder" 
+      @keydown="onKeydown" 
+      @input="adjustHeight"
+      :disabled="waitingForResponse"
+    ></textarea>
 
     <div class="tt-chat-input-controls">
-      <input v-if="allowFileUploads" type="file" id="file-upload" @change="handleFileInput"
-        :disabled="waitingForResponse" class="tt-chat-file-input" />
-      <label v-if="allowFileUploads" for="file-upload" class="tt-chat-file-button">
+      <input 
+        v-if="allowFileUploads" 
+        type="file" 
+        id="file-upload" 
+        @change="handleFileInput"
+        :disabled="waitingForResponse" 
+        class="tt-chat-file-input" 
+      />
+      <label 
+        v-if="allowFileUploads" 
+        for="file-upload" 
+        class="tt-chat-file-button"
+      >
         📎
       </label>
 
@@ -83,7 +88,11 @@ function adjustHeight(event: Event) {
     </div>
 
     <div v-if="files && files.length > 0" class="tt-chat-files-preview">
-      <div v-for="(file, index) in Array.from(files)" :key="index" class="tt-chat-file-preview">
+      <div 
+        v-for="(file, index) in Array.from(files)" 
+        :key="index" 
+        class="tt-chat-file-preview"
+      >
         {{ file.name }}
       </div>
     </div>
@@ -96,6 +105,7 @@ function adjustHeight(event: Event) {
   flex-direction: row;
   width: 100%;
   padding: 0;
+  position: relative;
 
   textarea {
     resize: none;
@@ -117,6 +127,34 @@ function adjustHeight(event: Event) {
     justify-content: center;
     padding: 0 20px;
   }
+}
 
+.tt-chat-file-input {
+  display: none;
+}
+
+.tt-chat-file-button {
+  cursor: pointer;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.tt-chat-files-preview {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 5px 15px;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.tt-chat-file-preview {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
 }
 </style>

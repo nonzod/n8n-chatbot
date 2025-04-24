@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { ChatMessage } from '../types';
+import type { ChatMessage, ChatAction } from '../types';
 
 const props = defineProps<{
   message: ChatMessage;
@@ -41,7 +41,23 @@ const formattedText = computed(() => formatText(props.message.text));
 
 // Verifica se ci sono azioni associate al messaggio
 const hasActions = computed(() => {
+  // Debug: Stampa nella console le azioni
+  if (props.message.actions && props.message.actions.length > 0) {
+    console.log("Azioni presenti nel messaggio:", props.message.actions);
+    props.message.actions.forEach((action, index) => {
+      console.log(`Azione ${index}:`, action);
+      console.log(`Tipo di azione ${index}:`, action.type);
+      console.log(`È di tipo privacy?`, action.type === 'privacy');
+    });
+  }
   return !!props.message.actions && props.message.actions.length > 0;
+});
+
+// Filtra le azioni solo per quelle che non sono di tipo privacy
+// Le azioni di tipo privacy vengono gestite direttamente dal componente Chat/ChatInput
+const filteredActions = computed(() => {
+  if (!props.message.actions) return [];
+  return props.message.actions.filter(action => action.type !== 'privacy');
 });
 
 // Gestisce il click su un pulsante
@@ -54,9 +70,9 @@ function handleButtonClick(url: string) {
   <div class="tt-chat-message" :class="classes">
     <div class="tt-chat-message-content" v-html="formattedText"></div>
     
-    <!-- Render delle azioni se presenti -->
-    <div v-if="hasActions" class="tt-chat-message-actions">
-      <template v-for="(action, index) in message.actions" :key="index">
+    <!-- Render delle azioni se presenti (solo quelle non di tipo privacy) -->
+    <div v-if="filteredActions.length > 0" class="tt-chat-message-actions">
+      <template v-for="(action, index) in filteredActions" :key="index">
         <!-- Button -->
         <button 
           v-if="action.type === 'button'" 
