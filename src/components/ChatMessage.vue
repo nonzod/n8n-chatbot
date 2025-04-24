@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { ChatMessage, ChatAction } from '../types';
+import type { ChatMessage } from '../types';
 
 const props = defineProps<{
   message: ChatMessage;

@@ -1,5 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useOptions } from '../composables/useOptions';
+
+const options = useOptions();
+
+const tooltip = computed(() => {
+  return {
+    show: options.value?.showTooltip || false,
+    text: options.value?.tooltipText || "Chiedi consiglio al nostro chatbot"
+  };
+});
 
 const props = defineProps<{
   isOpen: boolean;
@@ -22,6 +32,9 @@ function toggleChat() {
 </script>
 
 <template>
+  <div class="tt-chat-tooltip" v-if="tooltip.show">
+    <p>{{ tooltip.text }} </p>
+  </div>
   <div class="tt-chat-toggle" @click="toggleChat">
     <img :src="iconPath" alt="Toggle chat" class="tt-chat-toggle-icon" />
   </div>

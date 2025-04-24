@@ -27,6 +27,8 @@ export interface ChatOptions {
   loadPreviousSession?: boolean;
   
   // Customization
+  showTooltip?: boolean;
+  tooltipText?: string;
   theme?: {
     primaryColor?: string;
     secondaryColor?: string;
