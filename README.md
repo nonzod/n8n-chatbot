@@ -164,6 +164,32 @@ Il widget comunica con un flusso di lavoro N8N attraverso due principali azioni:
 
 Il widget salva l'ID sessione in `localStorage` per mantenere la continuità della conversazione. Puoi disabilitare questo comportamento impostando `loadPreviousSession: false`.
 
+## Consenso privacy
+
+Si attiva inviando
+
+```json
+{
+  "sessionId": "xxxxxx",
+  "chatInput": "lorem ipsum",
+  "output": "Consenso di privacy",
+  "actions": [
+    { "type": "privacy", "label": "Accetta la privacy", "action": "https://www.privacy.page"}
+  ]
+}
+```
+
+In risposta si riceve:
+
+```json
+{
+    "action":"sendMessage",
+    "sessionId":"xxxxxx",
+    "chatInput":"lorem ipsum",
+    "privacy": true|false
+}
+```
+
 ## API Javascript
 
 ```javascript
