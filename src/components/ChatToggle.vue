@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useOptions } from '../composables/useOptions';
 
 const options = useOptions();
 
-const tooltip = computed(() => {
-  return {
-    show: options.value?.showTooltip || false,
-    text: options.value?.tooltipText || "Chiedi consiglio al nostro chatbot"
-  };
-});
+// Nuovo stato per tenere traccia se il tooltip è stato chiuso
+const tooltipClosed = ref(false);
+
+const tooltip = computed(() => ({
+  // Mostra il tooltip solo se non è stato chiuso e se l'opzione showTooltip è true
+  show: options.value?.showTooltip && !tooltipClosed.value,
+  text: options.value?.tooltipText || "Chiedi consiglio al nostro chatbot"
+}));
 
 const props = defineProps<{
   isOpen: boolean;
@@ -28,6 +30,8 @@ const iconPath = computed(() => props.isOpen ? closeChatIconPath.value : openCha
 
 function toggleChat() {
   emit('toggle');
+  // Imposta tooltipClosed a true quando il toggle viene cliccato
+  tooltipClosed.value = true;
 }
 </script>
 
