@@ -1,5 +1,16 @@
-<script setup lang="ts">
-import { ref, computed } from 'vue';
+// Aggiungiamo un watcher per monitorare lo stato di waitingForResponse
+// Questo ripristinerà il focus quando la risposta arriva e la textarea è nuovamente abilitata
+watch(waitingForResponse, (newValue, oldValue) => {
+  if (oldValue === true && newValue === false) {
+    // La risposta è arrivata, il componente è tornato attivo
+    nextTick(() => {
+      if (textareaRef.value) {
+        textareaRef.value.focus();
+      }
+    });
+  }
+});<script setup lang="ts">
+import { ref, computed, nextTick, watch } from 'vue';
 import { useOptions } from '../composables/useOptions';
 import { useChat } from '../composables/useChat';
 import ButtonSend from './ButtonSend.vue';
@@ -8,6 +19,7 @@ const input = ref('');
 const files = ref<FileList | null>(null);
 const options = useOptions();
 const { waitingForResponse } = useChat();
+const textareaRef = ref<HTMLTextAreaElement | null>(null); // Ref per il riferimento diretto alla textarea
 
 const emit = defineEmits<{
   (e: 'send', text: string, files: File[]): void;
@@ -36,6 +48,14 @@ function onSubmit() {
   // Resetta l'input
   input.value = '';
   files.value = null;
+  
+  // Utilizziamo nextTick per assicurarci che il DOM sia aggiornato prima di impostare il focus
+  nextTick(() => {
+    if (textareaRef.value) {
+      textareaRef.value.focus();
+      textareaRef.value.style.height = 'auto';
+    }
+  });
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -60,11 +80,11 @@ function adjustHeight(event: Event) {
 <template>
   <div class="tt-chat-input">
     <textarea 
+      ref="textareaRef"
       v-model="input" 
       :placeholder="placeholder" 
       @keydown="onKeydown" 
       @input="adjustHeight"
-      :disabled="waitingForResponse"
     ></textarea>
 
     <div class="tt-chat-input-controls">
