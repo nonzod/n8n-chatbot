@@ -30,7 +30,10 @@
   --tt-chat-toggle-border-radius: 50%;
   --tt-chat-toggle-background: var(--tt-chat-primary-color);
   --tt-chat-toggle-color: white;
-  
+  --tt-chat-tooltip-border-color: var(--tt-chat-primary-color);
+  --tt-chat-tooltip-background: var(--tt-chat-primary-color);
+  --tt-chat-tooltip-color: var(--tt-chat-primary-color);
+
   /* Messages */
   --tt-chat-message-font-size: 1rem;
   --tt-chat-message-padding: 10px;
