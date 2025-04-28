@@ -7,6 +7,8 @@ import { useChat } from '../composables/useChat';
 import { useOptions } from '../composables/useOptions';
 import type { ChatAction, ChatMessage as ChatMessageType } from '../types';
 
+import chatLogo from '/resources/images/header_logo.svg';
+
 const chatBodyRef = ref<HTMLElement | null>(null);
 const chatStore = useChat();
 const options = useOptions();
@@ -160,7 +162,7 @@ onMounted(async () => {
     <div class="tt-chat-header">
       <h2>{{ title }}</h2>
       <p>{{ subtitle }}</p>
-      <img :src="'resources/images/header_logo.svg'" alt="Logo" class="tt-chat-header-logo" />
+      <img :src="chatLogo" alt="Logo" class="tt-chat-header-logo" />
     </div>
     
     <div ref="chatBodyRef" class="tt-chat-body">

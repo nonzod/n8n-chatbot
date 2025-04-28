@@ -22,11 +22,11 @@ const emit = defineEmits<{
 }>();
 
 // Calcola i percorsi delle immagini SVG
-const openChatIconPath = computed(() => 'resources/images/open_chat.svg');
-const closeChatIconPath = computed(() => 'resources/images/close_chat.svg');
+import openChatIcon from '/resources/images/open_chat.svg';
+import closeChatIcon from '/resources/images/close_chat.svg';
 
 // Determina quale icona mostrare in base allo stato
-const iconPath = computed(() => props.isOpen ? closeChatIconPath.value : openChatIconPath.value);
+const iconPath = computed(() => props.isOpen ? closeChatIcon : openChatIcon);
 
 function toggleChat() {
   emit('toggle');

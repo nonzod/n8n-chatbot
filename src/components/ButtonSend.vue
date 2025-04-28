@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import sendIcon from '/resources/images/send.svg';
+
 defineProps<{
   disabled: boolean;
 }>();
@@ -10,7 +12,7 @@ defineEmits<{
 
 <template>
   <button class="tt-chat-send-button" @click="$emit('click')" :disabled="disabled">
-    <img :src="'resources/images/send.svg'" alt="Send message" class="tt-chat-send-button" />
+    <img :src="sendIcon" alt="Send message" class="tt-chat-send-button" />
   </button>
 </template>
 

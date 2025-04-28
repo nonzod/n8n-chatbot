@@ -29,6 +29,7 @@ export default defineConfig({
     }
   },
   build: {
+    assetsInlineLimit: 8192,
     lib: {
       entry: resolve(__dirname, 'src/main.ts'),
       name: 'SimpleChatN8N',
