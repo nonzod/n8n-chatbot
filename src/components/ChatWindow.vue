@@ -26,7 +26,7 @@ function toggleChat() {
 .tt-chat-window-wrapper {
   position: fixed;
   bottom: 100px;
-  right: 20px;
+  right: 0;
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -40,6 +40,7 @@ function toggleChat() {
     border-radius: 10px;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
     margin-bottom: 15px;
+    margin-right: 15px;
     overflow: hidden;
   }
 }

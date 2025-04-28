@@ -124,10 +124,20 @@ function adjustHeight(event: Event) {
     max-height: 150px;
     overflow-y: auto;
     font-family: inherit;
-    font-size: 14px;
+    font-size: 1rem;
     outline: none;
+    box-shadow: none;
     line-height: 1.4;
     flex: 1;
+    height: auto;
+
+    &::placeholder {
+      font-weight: normal;
+      font-style: italic;
+      font-size: 1rem;
+      opacity: 0.5;
+      color: var(--tt-chat-primary-color);
+    }
   }
 
   .tt-chat-input-controls {
