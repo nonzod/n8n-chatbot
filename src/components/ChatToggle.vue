@@ -48,23 +48,24 @@ function toggleChat() {
 .tt-chat-toggle {
   width: 50px;
   height: 50px;
-  border-radius: 50%;
+  border-radius: 50% 0 0 50%;
   background-color: var(--tt-chat-primary-color, brown);
   color: white;
   display: flex;
+  flex: 0 0 auto;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s;
-}
 
-.tt-chat-toggle:hover {
-  transform: scale(1.05);
-}
+  &:hover {
+    transform: scale(1.05);
+  }
 
-.tt-chat-toggle-icon {
-  width: 24px;
-  height: 24px;
+  .tt-chat-toggle-icon {
+    width: 24px;
+    height: 24px;
+  }
 }
 </style>

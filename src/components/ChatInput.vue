@@ -1,15 +1,4 @@
-// Aggiungiamo un watcher per monitorare lo stato di waitingForResponse
-// Questo ripristinerà il focus quando la risposta arriva e la textarea è nuovamente abilitata
-watch(waitingForResponse, (newValue, oldValue) => {
-  if (oldValue === true && newValue === false) {
-    // La risposta è arrivata, il componente è tornato attivo
-    nextTick(() => {
-      if (textareaRef.value) {
-        textareaRef.value.focus();
-      }
-    });
-  }
-});<script setup lang="ts">
+<script setup lang="ts">
 import { ref, computed, nextTick, watch } from 'vue';
 import { useOptions } from '../composables/useOptions';
 import { useChat } from '../composables/useChat';

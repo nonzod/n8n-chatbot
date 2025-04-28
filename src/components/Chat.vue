@@ -218,14 +218,16 @@ onMounted(async () => {
     
     h2 {
       margin: 0 0 5px 0;
-      font-size: 1.2em;
+      font-size: 26px;
+      line-height: 31px;
       font-weight: 600;
       color: var(--tt-chat-header-color, #333);
     }
     
     p {
-      margin: 0;
-      font-size: 0.9em;
+      margin: 0 0 10px 0;
+      font-size: 18px;
+      line-height: 22px;      
       color: var(--tt-chat-subheader-color, #666);
     }
 
