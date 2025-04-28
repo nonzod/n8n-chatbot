@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { ChatMessage, ChatAction } from '../types';
+import VueMarkdown from 'vue-markdown-render';
+import type { ChatMessage } from '../types';
 
 const props = defineProps<{
   message: ChatMessage;
@@ -13,51 +14,9 @@ const classes = computed(() => {
   };
 });
 
-// Funzione semplice per formattare il testo con markdown di base
-// In una versione più completa, si potrebbe usare una libreria markdown
-function formatText(text: string): string {
-  // Converti **testo** in <strong>testo</strong>
-  let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  
-  // Converti *testo* in <em>testo</em>
-  formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
-  
-  // Converti `codice` in <code>codice</code>
-  formatted = formatted.replace(/`(.*?)`/g, '<code>$1</code>');
-  
-  // Converti URL in <a>
-  formatted = formatted.replace(
-    /(https?:\/\/[^\s]+)/g, 
-    '<a href="$1" target="_blank" rel="noopener">$1</a>'
-  );
-  
-  // Converti newlines in <br>
-  formatted = formatted.replace(/\n/g, '<br>');
-  
-  return formatted;
-}
-
-const formattedText = computed(() => formatText(props.message.text));
-
 // Verifica se ci sono azioni associate al messaggio
 const hasActions = computed(() => {
-  // Debug: Stampa nella console le azioni
-  if (props.message.actions && props.message.actions.length > 0) {
-    console.log("Azioni presenti nel messaggio:", props.message.actions);
-    props.message.actions.forEach((action, index) => {
-      console.log(`Azione ${index}:`, action);
-      console.log(`Tipo di azione ${index}:`, action.type);
-      console.log(`È di tipo privacy?`, action.type === 'privacy');
-    });
-  }
   return !!props.message.actions && props.message.actions.length > 0;
-});
-
-// Filtra le azioni solo per quelle che non sono di tipo privacy
-// Le azioni di tipo privacy vengono gestite direttamente dal componente Chat/ChatInput
-const filteredActions = computed(() => {
-  if (!props.message.actions) return [];
-  return props.message.actions.filter(action => action.type !== 'privacy');
 });
 
 // Gestisce il click su un pulsante
@@ -68,11 +27,13 @@ function handleButtonClick(url: string) {
 
 <template>
   <div class="tt-chat-message" :class="classes">
-    <div class="tt-chat-message-content" v-html="formattedText"></div>
+    <div class="tt-chat-message-content">
+      <VueMarkdown :source="message.text" />
+    </div>
     
-    <!-- Render delle azioni se presenti (solo quelle non di tipo privacy) -->
-    <div v-if="filteredActions.length > 0" class="tt-chat-message-actions">
-      <template v-for="(action, index) in filteredActions" :key="index">
+    <!-- Render delle azioni se presenti -->
+    <div v-if="hasActions" class="tt-chat-message-actions">
+      <template v-for="(action, index) in message.actions" :key="index">
         <!-- Button -->
         <button 
           v-if="action.type === 'button'" 
@@ -127,6 +88,39 @@ function handleButtonClick(url: string) {
 
 .tt-chat-message-content {
   line-height: 1.5;
+}
+
+/* Stili aggiuntivi per il markdown renderizzato */
+.tt-chat-message-content :deep(p) {
+  margin: 0.5em 0;
+}
+
+.tt-chat-message-content :deep(a) {
+  color: var(--tt-chat-primary-color, #2196f3);
+  text-decoration: none;
+}
+
+.tt-chat-message-content :deep(a:hover) {
+  text-decoration: underline;
+}
+
+.tt-chat-message-content :deep(code) {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.tt-chat-message-content :deep(pre) {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.tt-chat-message-content :deep(ul), .tt-chat-message-content :deep(ol) {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
 }
 
 .tt-chat-message-files {
