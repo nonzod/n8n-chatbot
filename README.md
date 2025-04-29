@@ -6,7 +6,7 @@
 A customizable Vue.js chat widget for integrating n8n-powered chatbots into any website.
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/nonzod/n8n-chatbot/main/demo/screenshot.png" alt="TT Chat N8N Preview" width="400">
+  <img src="https://raw.githubusercontent.com/nonzod/n8n-chatbot/main/resources/screenshot.png" alt="TT Chat N8N Preview" width="400">
 </div>
 
 ## Features
