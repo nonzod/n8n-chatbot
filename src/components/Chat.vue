@@ -3,11 +3,10 @@ import { ref, onMounted, nextTick, computed, watch } from 'vue';
 import ChatMessage from './ChatMessage.vue';
 import ChatInput from './ChatInput.vue';
 import ConfirmPrivacy from './ConfirmPrivacy.vue';
+import IconLoader from './IconLoader.vue';
 import { useChat } from '../composables/useChat';
 import { useOptions } from '../composables/useOptions';
 import type { ChatAction, ChatMessage as ChatMessageType } from '../types';
-
-import chatLogo from '/resources/images/header_logo.svg';
 
 const chatBodyRef = ref<HTMLElement | null>(null);
 const chatStore = useChat();
@@ -162,7 +161,7 @@ onMounted(async () => {
     <div class="tt-chat-header">
       <h2>{{ title }}</h2>
       <p>{{ subtitle }}</p>
-      <img :src="chatLogo" alt="Logo" class="tt-chat-header-logo" />
+      <IconLoader name="headerLogo" className="tt-chat-header-logo" />
     </div>
     
     <div ref="chatBodyRef" class="tt-chat-body">

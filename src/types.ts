@@ -36,7 +36,15 @@ export interface ChatOptions {
     textColor?: string;
   };
   
-  // i18n (simplified)
+  // Icons customization (Base64 encoded SVG)
+  icons?: {
+    openChat?: string;
+    closeChat?: string;
+    send?: string;
+    headerLogo?: string;
+  };
+
+  // i18n
   placeholder?: string;
   title?: string;
   subtitle?: string;

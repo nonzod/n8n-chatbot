@@ -97,6 +97,10 @@ createChat({
   subtitle: 'Come posso aiutarti?',
   placeholder: 'Scrivi un messaggio...',
   
+  // Tooltip personalizzato
+  showTooltip: true,
+  tooltipText: "Prova il nostro chatbot",
+  
   // Personalizzazione tema
   theme: {
     primaryColor: '#2196f3',
@@ -107,6 +111,38 @@ createChat({
     botTextColor: '#000000',
     headerColor: '#f5f5f5',
     headerTextColor: '#333333'
+  },
+  
+  // Personalizzazione icone (SVG come stringhe base64)
+  icons: {
+    openChat: 'data:image/svg+xml;base64,...', // Icona per aprire la chat
+    closeChat: 'data:image/svg+xml;base64,...', // Icona per chiudere la chat
+    send: 'data:image/svg+xml;base64,...', // Icona pulsante invio
+    headerLogo: 'data:image/svg+xml;base64,...' // Logo nell'header
+  }
+});
+```
+
+## Personalizzazione delle Icone
+
+Il chatbot supporta la personalizzazione di tutte le icone SVG utilizzate nell'interfaccia:
+
+1. **openChat**: l'icona mostrata sul pulsante quando la chat è chiusa
+2. **closeChat**: l'icona mostrata sul pulsante quando la chat è aperta
+3. **send**: l'icona del pulsante di invio messaggi
+4. **headerLogo**: il logo mostrato nell'header della chat
+
+Le icone devono essere fornite come stringhe SVG codificate in base64 con il prefisso `data:image/svg+xml;base64,`. È possibile specificare tutte le icone o solo alcune di esse; quelle non specificate utilizzeranno le icone di default.
+
+Esempio:
+
+```javascript
+createChat({
+  webhookUrl: 'YOUR_N8N_WEBHOOK_URL',
+  icons: {
+    openChat: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0...', // SVG codificato in base64
+    send: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0...' // SVG codificato in base64
+    // closeChat e headerLogo useranno le icone predefinite
   }
 });
 ```

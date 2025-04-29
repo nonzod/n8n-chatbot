@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import sendIcon from '/resources/images/send.svg';
+import { computed } from 'vue';
+import { useOptions } from '../composables/useOptions';
+import defaultSendIcon from '/resources/images/send.svg';
+
+const options = useOptions();
+const sendIcon = computed(() => options.value?.icons?.send || defaultSendIcon);
 
 defineProps<{
   disabled: boolean;

@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useOptions } from '../composables/useOptions';
-
-// Assets SVG
-import openChatIcon from '/resources/images/open_chat.svg';
-import closeChatIcon from '/resources/images/close_chat.svg';
+import IconLoader from './IconLoader.vue';
 
 const options = useOptions();
 
@@ -26,7 +23,7 @@ const emit = defineEmits<{
 }>();
 
 // Determina quale icona mostrare in base allo stato
-const iconPath = computed(() => props.isOpen ? closeChatIcon : openChatIcon);
+const iconName = computed(() => props.isOpen ? 'closeChat' : 'openChat');
 
 function toggleChat() {
   emit('toggle');
@@ -40,7 +37,7 @@ function toggleChat() {
     <p>{{ tooltip.text }} </p>
   </div>
   <div class="tt-chat-toggle" @click="toggleChat">
-    <img :src="iconPath" alt="Toggle chat" class="tt-chat-toggle-icon" />
+    <IconLoader :name="iconName" className="tt-chat-toggle-icon" />
   </div>
 </template>
 
