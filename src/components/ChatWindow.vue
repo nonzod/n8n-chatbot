@@ -33,6 +33,7 @@ function toggleChat() {
   align-items: flex-end;
   max-width: calc(100% - (var(--tt-chat-window-right, var(--tt-chat-spacing))) * 1.5);
   max-height: calc(100% - (var(--tt-chat-window-bottom, var(--tt-chat-spacing))) * 1.5);
+  min-height: var(--tt-chat-window-min-height);
 
   .tt-chat-window {
     width: var(--tt-chat-window-width);
