@@ -25,22 +25,25 @@ function toggleChat() {
 <style lang="scss">
 .tt-chat-window-wrapper {
   position: fixed;
-  bottom: 100px;
-  right: 0;
-  z-index: 9999;
+  right: var(--tt-chat-window-right, var(--tt-chat-spacing));
+  bottom: var(--tt-chat-window-bottom, var(--tt-chat-spacing));
+  z-index: var(--tt-chat-window-z-index);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-
+  max-width: calc(100% - (var(--tt-chat-window-right, var(--tt-chat-spacing))) * 1.5);
+  max-height: calc(100% - (var(--tt-chat-window-bottom, var(--tt-chat-spacing))) * 1.5);
 
   .tt-chat-window {
-    width: 350px;
-    height: 500px;
+    width: var(--tt-chat-window-width);
+    height: var(--tt-chat-window-height);
+    max-width: 100%;
+    max-height: 100%;
     background: white;
     border-radius: 10px;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-    margin-bottom: 15px;
-    margin-right: 15px;
+    margin-right: var(--tt-chat-window-margin-right);
+    margin-bottom: var(--tt-chat-window-margin-bottom);
     overflow: hidden;
   }
 }

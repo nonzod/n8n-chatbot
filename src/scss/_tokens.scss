@@ -18,12 +18,14 @@
   --tt-chat-font-family: "Plus Jakarta Sans", sans-serif;
 
   /* Window dimensions */
-  --tt-chat-window-width: 350px;
+  --tt-chat-window-width: 400px;
   --tt-chat-window-height: 500px;
-  --tt-chat-window-bottom: 20px;
-  --tt-chat-window-right: 20px;
-  --tt-chat-window-z-index: 9999;
-  
+  --tt-chat-window-bottom: 100px;
+  --tt-chat-window-right: 0;
+  --tt-chat-window-margin-right: 15px;
+  --tt-chat-window-margin-bottom: 15px;
+  --tt-chat-window-z-index: 999;
+
   /* Toggle button */
   --tt-chat-toggle-size: 50px;
   --tt-chat-toggle-border-radius: 50%;
@@ -31,7 +33,7 @@
   --tt-chat-tooltip-border-color: var(--tt-chat-primary-color);
   --tt-chat-tooltip-background: var(--tt-chat-primary-color);
   --tt-chat-tooltip-color: var(--tt-chat-primary-color);
-
+  
   /* Messages */
   --tt-chat-message-font-size: 16px;
   --tt-chat-message-border-radius: 5px;
