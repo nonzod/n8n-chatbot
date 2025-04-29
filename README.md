@@ -1,265 +1,314 @@
-# Tourtools N8N Chatbot
+# TT Chat N8N
 
-Fork del frontend ufficiale del chatbot N8N
+[![npm version](https://img.shields.io/npm/v/tt-chat-n8n.svg)](https://www.npmjs.com/package/tt-chat-n8n)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## Setup Locale
+A customizable Vue.js chat widget for integrating n8n-powered chatbots into any website.
 
-Node version 22
+<div align="center">
+  <img src="https://raw.githubusercontent.com/nonzod/n8n-chatbot/main/demo/screenshot.png" alt="TT Chat N8N Preview" width="400">
+</div>
 
-### Clone e Installazione
+## Features
+
+- 🚀 **Easy Integration**: Simple API to add a chat widget to any website
+- 🎨 **Highly Customizable**: Extensive theming and configuration options
+- 🔄 **Session Management**: Automatic conversation history persistence
+- 📱 **Responsive Design**: Works on both desktop and mobile devices
+- 💬 **Markdown Support**: Rich text formatting in bot responses
+- 🔘 **Interactive Actions**: Support for buttons and privacy consent workflows
+- 📎 **File Uploads**: Optional file attachment capability
+- 🌐 **Internationalization**: Customizable text for multilingual support
+
+## Installation
 
 ```bash
-# Clona il repository
-git clone [url-del-tuo-repository]
-cd tt-chat-n8n
-
-# Installa le dipendenze
-npm install
+npm install tt-chat-n8n
 ```
 
-### Comandi di Sviluppo
+Or using yarn:
 
 ```bash
-# Avvia il server di sviluppo
-npm run dev
-
-# Esegue la build per la produzione
-npm run build
-
-# Verifica i tipi TypeScript
-npm run typecheck
+yarn add tt-chat-n8n
 ```
 
-## Utilizzo Base
+## Quick Start
 
-### Integrazione come Dipendenza Locale
+### ES Module Import
 
 ```javascript
-// Nel tuo progetto principale
-import { createChat } from './path/to/tt-chat-n8n/dist/tt-chat.es.js';
-import './path/to/tt-chat-n8n/dist/style.css';
+import { createChat } from 'tt-chat-n8n';
+import 'tt-chat-n8n/style.css';
 
 createChat({
-  webhookUrl: 'YOUR_N8N_WEBHOOK_URL'
+  webhookUrl: 'YOUR_N8N_WEBHOOK_URL',
+  title: 'Chat Support',
+  subtitle: 'How can we help you today?'
 });
 ```
 
-### Integrazione Diretta nella Pagina HTML
+### Script Tag (UMD)
 
 ```html
-<script type="module">
-  import { createChat } from './path/to/tt-chat-n8n/dist/tt-chat.es.js';
-  
-  createChat({
-    webhookUrl: 'YOUR_N8N_WEBHOOK_URL'
+<link href="https://unpkg.com/tt-chat-n8n/dist/style.css" rel="stylesheet">
+<script src="https://unpkg.com/tt-chat-n8n/dist/tt-chat.umd.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    TTChatN8N.createChat({
+      webhookUrl: 'YOUR_N8N_WEBHOOK_URL'
+    });
   });
 </script>
-<link href="./path/to/tt-chat-n8n/dist/style.css" rel="stylesheet">
 ```
 
-## Opzioni di Configurazione
+## Configuration Options
 
 ```javascript
 createChat({
-  // Obbligatorio: URL del webhook N8N
+  // Required: n8n webhook URL
   webhookUrl: 'https://n8n.example.com/webhook/your-id',
   
-  // Configurazione della richiesta HTTP
+  // HTTP request configuration
   webhookConfig: {
-    method: 'POST', // 'GET' o 'POST'
-    headers: {} // Header HTTP personalizzati
+    method: 'POST', // 'GET' or 'POST'
+    headers: {} // Custom HTTP headers
   },
   
-  // Selettore o elemento DOM per il mounting
+  // DOM target element or selector
   target: '#tt-chat-n8n',
   
-  // Modalità di visualizzazione
-  mode: 'window', // 'window' (finestra popup) o 'fullscreen'
+  // Display mode
+  mode: 'window', // 'window' (popup) or 'fullscreen'
   
-  // Messaggi iniziali da visualizzare
+  // Initial welcome messages
   initialMessages: [
-    'Ciao! 👋',
-    'Come posso aiutarti oggi?'
+    'Hello! 👋',
+    'How can I help you today?'
   ],
   
-  // Chiavi per parametri della richiesta
-  chatInputKey: 'chatInput', // nome del parametro per il testo di input
-  chatSessionKey: 'sessionId', // nome del parametro per l'ID sessione
+  // Request parameter key names
+  chatInputKey: 'chatInput', // Parameter name for input text
+  chatSessionKey: 'sessionId', // Parameter name for session ID
   
-  // Gestione sessione
-  loadPreviousSession: true, // carica la conversazione precedente
+  // Session management
+  loadPreviousSession: true, // Load previous conversation
   
-  // Funzionalità file
-  allowFileUploads: false, // abilita upload di file
+  // File upload feature
+  allowFileUploads: false, // Enable file uploads
   
-  // Testi dell'interfaccia
+  // UI text customization
   title: 'Chat',
-  subtitle: 'Come posso aiutarti?',
-  placeholder: 'Scrivi un messaggio...',
+  subtitle: 'How can I help you?',
+  placeholder: 'Type your message...',
   
-  // Tooltip personalizzato
+  // Tooltip customization
   showTooltip: true,
-  tooltipText: "Prova il nostro chatbot",
+  tooltipText: "Try our chatbot",
   
-  // Personalizzazione tema
+  // Theme customization
   theme: {
-    primaryColor: '#2196f3',
+    primaryColor: '#044273',
     backgroundColor: '#ffffff',
     userMessageColor: '#e0f7fa',
     botMessageColor: '#f5f5f5',
     userTextColor: '#000000',
     botTextColor: '#000000',
-    headerColor: '#f5f5f5',
-    headerTextColor: '#333333'
+    headerColor: '#044273',
+    headerTextColor: '#ffffff'
   },
   
-  // Personalizzazione icone (SVG come stringhe base64)
+  // Icon customization (SVG as base64 strings)
   icons: {
-    openChat: 'data:image/svg+xml;base64,...', // Icona per aprire la chat
-    closeChat: 'data:image/svg+xml;base64,...', // Icona per chiudere la chat
-    send: 'data:image/svg+xml;base64,...', // Icona pulsante invio
-    headerLogo: 'data:image/svg+xml;base64,...' // Logo nell'header
+    openChat: 'data:image/svg+xml;base64,...', // Icon for opening chat
+    closeChat: 'data:image/svg+xml;base64,...', // Icon for closing chat
+    send: 'data:image/svg+xml;base64,...', // Send button icon
+    headerLogo: 'data:image/svg+xml;base64,...' // Header logo
   }
 });
 ```
 
-## Personalizzazione delle Icone
+## Icon Customization
 
-Il chatbot supporta la personalizzazione di tutte le icone SVG utilizzate nell'interfaccia:
-
-1. **openChat**: l'icona mostrata sul pulsante quando la chat è chiusa
-2. **closeChat**: l'icona mostrata sul pulsante quando la chat è aperta
-3. **send**: l'icona del pulsante di invio messaggi
-4. **headerLogo**: il logo mostrato nell'header della chat
-
-Le icone devono essere fornite come stringhe SVG codificate in base64 con il prefisso `data:image/svg+xml;base64,`. È possibile specificare tutte le icone o solo alcune di esse; quelle non specificate utilizzeranno le icone di default.
-
-Esempio:
+You can customize all SVG icons used in the chat interface by providing base64-encoded SVG strings:
 
 ```javascript
 createChat({
   webhookUrl: 'YOUR_N8N_WEBHOOK_URL',
   icons: {
-    openChat: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0...', // SVG codificato in base64
-    send: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0...' // SVG codificato in base64
-    // closeChat e headerLogo useranno le icone predefinite
+    openChat: 'data:image/svg+xml;base64,PHN2ZyB3...', // Base64 encoded SVG
+    closeChat: 'data:image/svg+xml;base64,PHN2ZyB3...', // Base64 encoded SVG
+    send: 'data:image/svg+xml;base64,PHN2ZyB3...', // Base64 encoded SVG
+    headerLogo: 'data:image/svg+xml;base64,PHN2ZyB3...' // Base64 encoded SVG
   }
 });
 ```
 
-## Integrazione con N8N
-
-Il widget comunica con un flusso di lavoro N8N attraverso due principali azioni:
-
-1. **loadPreviousSession**: Carica messaggi di una sessione precedente
-2. **sendMessage**: Invia un nuovo messaggio e riceve la risposta
-
-### Configurazione del Webhook N8N
-
-1. Crea un nuovo workflow in N8N
-2. Aggiungi un nodo "Webhook" come trigger
-3. Configura il webhook per gestire i due tipi di richieste:
-   - `action: 'loadPreviousSession'` per caricare conversazioni passate
-   - `action: 'sendMessage'` per elaborare nuovi messaggi
-
-### Formato Risposta del Webhook
+To convert your SVG to base64, use an online converter or the following Node.js script:
 
 ```javascript
-// Esempio di risposta per sendMessage
-{
-  "output": "Questo è il messaggio di risposta del bot",
-  "actions": [
-    {
-      "type": "button",
-      "label": "Visita il sito",
-      "action": "https://example.com"
-    }
-  ]
-}
+const fs = require('fs');
+const path = require('path');
 
-// Esempio di risposta per loadPreviousSession
+const svgPath = path.join(__dirname, 'your-icon.svg');
+const svgContent = fs.readFileSync(svgPath, 'utf-8');
+const base64 = Buffer.from(svgContent).toString('base64');
+
+console.log(`data:image/svg+xml;base64,${base64}`);
+```
+
+## n8n Integration
+
+The widget communicates with an n8n workflow through two main actions:
+
+### 1. Load Previous Session
+
+When the widget initializes, it attempts to load previous conversation history:
+
+**Request:**
+```json
+{
+  "action": "loadPreviousSession",
+  "sessionId": "unique-session-id"
+}
+```
+
+**Expected Response:**
+```json
 {
   "data": [
     {
       "id": "HumanMessage_1",
       "kwargs": {
-        "content": "Messaggio dell'utente"
+        "content": "User message"
       }
     },
     {
       "id": "AIMessage_1",
       "kwargs": {
-        "content": "Risposta del bot"
+        "content": "Bot response"
       }
     }
   ]
 }
 ```
 
-## Gestione della Sessione
+### 2. Send Message
 
-Il widget salva l'ID sessione in `localStorage` per mantenere la continuità della conversazione. Puoi disabilitare questo comportamento impostando `loadPreviousSession: false`.
+When a user sends a message:
 
-## Consenso privacy
-
-Si attiva inviando
-
+**Request:**
 ```json
 {
-  "sessionId": "xxxxxx",
-  "chatInput": "lorem ipsum",
-  "output": "Consenso di privacy",
+  "action": "sendMessage",
+  "sessionId": "unique-session-id",
+  "chatInput": "User message text"
+}
+```
+
+**Expected Response:**
+```json
+{
+  "output": "Bot response message",
   "actions": [
-    { "type": "privacy", "label": "Accetta la privacy", "action": "https://www.privacy.page"}
+    {
+      "type": "button",
+      "label": "Visit Website",
+      "action": "https://example.com"
+    }
   ]
 }
 ```
 
-In risposta si riceve:
+## Interactive Elements
+
+The chat supports several types of interactive elements that can be included in bot responses:
+
+### Buttons
 
 ```json
 {
-    "action":"sendMessage",
-    "sessionId":"xxxxxx",
-    "chatInput":"lorem ipsum",
-    "privacy": true|false
+  "output": "Would you like to visit our website?",
+  "actions": [
+    {
+      "type": "button",
+      "label": "Visit Website",
+      "action": "https://example.com"
+    }
+  ]
 }
 ```
 
-## API Javascript
+### Privacy Consent
+
+To trigger a privacy consent form:
+
+```json
+{
+  "output": "Before we continue, we need your consent.",
+  "actions": [
+    {
+      "type": "privacy",
+      "label": "Accept Privacy Policy",
+      "action": "https://example.com/privacy"
+    }
+  ]
+}
+```
+
+The user's response will be sent back with a `privacy` field:
+
+```json
+{
+  "action": "sendMessage",
+  "sessionId": "unique-session-id",
+  "chatInput": "",
+  "privacy": true
+}
+```
+
+## JavaScript API
 
 ```javascript
-// Crea l'istanza del chat
+// Create chat instance
 const chatInstance = createChat({
   webhookUrl: 'YOUR_WEBHOOK_URL'
 });
 
-// Smonta il widget
+// Remove the widget
 chatInstance.unmount();
 ```
 
-## Struttura del Progetto
+## Browser Support
 
+- Chrome/Edge (latest 2 versions)
+- Firefox (latest 2 versions)
+- Safari (latest 2 versions)
+
+## Development
+
+```bash
+# Clone repository
+git clone https://github.com/nonzod/n8n-chatbot.git
+cd tt-chat-n8n
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Type checking
+npm run typecheck
 ```
-├── src/
-│   ├── components/       # Componenti Vue
-│   ├── composables/      # Composable functions
-│   ├── plugins/          # Plugin Vue
-│   ├── utils/            # Utility e funzioni di supporto
-│   ├── scss/             # File SCSS e variabili
-│   ├── main.ts           # Entry point
-│   └── types.ts          # Type definitions
-├── dist/                 # Build output
-├── vite.config.ts        # Configurazione Vite
-└── package.json
-```
 
-## Browser Supportati
+## Contributing
 
-- Chrome/Edge (ultime 2 versioni)
-- Firefox (ultime 2 versioni)
-- Safari (ultime 2 versioni)
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Licenza
+## License
 
-MIT
+[MIT](https://mit-license.org/)

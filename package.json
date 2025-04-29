@@ -33,7 +33,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "typecheck": "vue-tsc --noEmit",
+    "typecheck": "tsc --noEmit && vue-tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {
