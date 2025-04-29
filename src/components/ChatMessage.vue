@@ -30,19 +30,15 @@ function handleButtonClick(url: string) {
     <div class="tt-chat-message-content">
       <VueMarkdown :source="message.text" />
     </div>
-    
+
     <!-- Render delle azioni se presenti -->
     <div v-if="hasActions" class="tt-chat-message-actions">
       <template v-for="(action, index) in message.actions" :key="index">
         <!-- Button -->
-        <button 
-          v-if="action.type === 'button'" 
-          class="tt-chat-action-button"
-          @click="handleButtonClick(action.action)"
-        >
+        <button v-if="action.type === 'button'" class="tt-chat-action-button" @click="handleButtonClick(action.action)">
           {{ action.label }}
         </button>
-        
+
         <!-- Checkbox -->
         <div v-else-if="action.type === 'checkbox'" class="tt-chat-action-checkbox">
           <input type="checkbox" :id="'action-checkbox-' + index">
@@ -53,7 +49,7 @@ function handleButtonClick(url: string) {
         </div>
       </template>
     </div>
-    
+
     <div v-if="message.files && message.files.length > 0" class="tt-chat-message-files">
       <div v-for="file in message.files" :key="file.name" class="tt-chat-message-file">
         {{ file.name }}
@@ -71,123 +67,127 @@ function handleButtonClick(url: string) {
   margin-bottom: 10px;
   border-radius: 10px;
   word-wrap: break-word;
-}
 
-.tt-chat-message-from-user {
-  background-color: var(--tt-chat-user-bg, #e0f7fa);
-  color: var(--tt-chat-user-color, #000);
-  margin-left: auto;
-  border-bottom-right-radius: 0;
-}
-
-.tt-chat-message-from-bot {
-  background-color: var(--tt-chat-bot-bg, #f5f5f5);
-  color: var(--tt-chat-bot-color, #000);
-  border-bottom-left-radius: 0;
-}
-
-.tt-chat-message-content {
-  line-height: 1.2;
-
-  p {
-    margin: 10px
+  &.tt-chat-message-from-user {
+    background-color: var(--tt-chat-user-bg, #e0f7fa);
+    color: var(--tt-chat-user-color, #000);
+    margin-left: auto;
+    border-bottom-right-radius: 0;
   }
-}
 
-/* Stili aggiuntivi per il markdown renderizzato */
-.tt-chat-message-content :deep(p) {
-  margin: 0.5em 0;
-}
+  &.tt-chat-message-from-bot {
+    background-color: var(--tt-chat-bot-bg, #f5f5f5);
+    color: var(--tt-chat-bot-color, #000);
+    border-bottom-left-radius: 0;
+  }
 
-.tt-chat-message-content :deep(a) {
-  color: var(--tt-chat-primary-color, #2196f3);
-  text-decoration: none;
-}
+  .tt-chat-message-content {
+    line-height: 1.2;
 
-.tt-chat-message-content :deep(a:hover) {
-  text-decoration: underline;
-}
+    p {
+      margin: 10px
+    }
 
-.tt-chat-message-content :deep(code) {
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-family: monospace;
-}
+    /* Stili aggiuntivi per il markdown renderizzato */
+    :deep(p) {
+      margin: 0.5em 0;
+    }
 
-.tt-chat-message-content :deep(pre) {
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 8px;
-  border-radius: 4px;
-  overflow-x: auto;
-}
+    :deep(a) {
+      color: var(--tt-chat-primary-color, #2196f3);
+      text-decoration: none;
+    }
 
-.tt-chat-message-content :deep(ul), .tt-chat-message-content :deep(ol) {
-  margin: 0.5em 0;
-  padding-left: 1.5em;
-}
+    :deep(a:hover) {
+      text-decoration: underline;
+    }
 
-.tt-chat-message-files {
-  margin-top: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
+    :deep(code) {
+      background-color: rgba(0, 0, 0, 0.05);
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
 
-.tt-chat-message-file {
-  font-size: 0.8em;
-  padding: 3px 8px;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-}
+    :deep(pre) {
+      background-color: rgba(0, 0, 0, 0.05);
+      padding: 8px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
 
-/* Stili per le azioni */
-.tt-chat-message-actions {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+    :deep(ul),
+    :deep(ol) {
+      margin: 0.5em 0;
+      padding-left: 1.5em;
+    }
+  }
 
-.tt-chat-action-button {
-  background-color: var(--tt-chat-primary-color, #2196f3);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
-  text-align: center;
-  align-self: flex-start;
-}
+  /* Stili per le azioni */
+  .tt-chat-message-actions {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
-.tt-chat-action-button:hover {
-  background-color: var(--tt-chat-primary-color-hover, #1976d2);
-}
 
-.tt-chat-action-checkbox {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-}
+    .tt-chat-action-button {
+      background-color: var(--tt-chat-primary-color, #2196f3);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+      text-align: center;
+      align-self: flex-start;
 
-.tt-chat-action-checkbox input[type="checkbox"] {
-  margin-top: 3px;
-}
+      &:hover {
+        background-color: var(--tt-chat-primary-color-hover, #1976d2);
+      }
+    }
 
-.tt-chat-action-checkbox label {
-  font-size: 14px;
-  line-height: 1.4;
-}
+    .tt-chat-action-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
 
-.tt-chat-action-checkbox a {
-  margin-left: 5px;
-  color: var(--tt-chat-primary-color, #2196f3);
-  text-decoration: none;
-}
 
-.tt-chat-action-checkbox a:hover {
-  text-decoration: underline;
+      input[type="checkbox"] {
+        margin-top: 3px;
+      }
+
+      label {
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      a {
+        margin-left: 5px;
+        color: var(--tt-chat-primary-color, #2196f3);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .tt-chat-message-files {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+
+
+    .tt-chat-message-file {
+      font-size: 0.8em;
+      padding: 3px 8px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 4px;
+    }
+  }
 }
 </style>

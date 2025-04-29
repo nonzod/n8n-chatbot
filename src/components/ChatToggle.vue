@@ -2,6 +2,10 @@
 import { ref, computed } from 'vue';
 import { useOptions } from '../composables/useOptions';
 
+// Assets SVG
+import openChatIcon from '/resources/images/open_chat.svg';
+import closeChatIcon from '/resources/images/close_chat.svg';
+
 const options = useOptions();
 
 // Nuovo stato per tenere traccia se il tooltip è stato chiuso
@@ -20,10 +24,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'toggle'): void;
 }>();
-
-// Calcola i percorsi delle immagini SVG
-import openChatIcon from '/resources/images/open_chat.svg';
-import closeChatIcon from '/resources/images/close_chat.svg';
 
 // Determina quale icona mostrare in base allo stato
 const iconPath = computed(() => props.isOpen ? closeChatIcon : openChatIcon);
