@@ -210,6 +210,7 @@ onMounted(async () => {
   width: 100%;
   background-color: var(--tt-chat-bg, #fff);
   font-family: var(--tt-chat-font-family);
+  z-index: 99;
   
   &-header {
     position: relative;
