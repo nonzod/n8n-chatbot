@@ -87,7 +87,11 @@ function handleButtonClick(url: string) {
 }
 
 .tt-chat-message-content {
-  line-height: 1.5;
+  line-height: 1.2;
+
+  p {
+    margin: 10px
+  }
 }
 
 /* Stili aggiuntivi per il markdown renderizzato */

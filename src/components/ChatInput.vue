@@ -130,6 +130,7 @@ function adjustHeight(event: Event) {
     line-height: 1.4;
     flex: 1;
     height: auto;
+    margin: 0;
 
     &::placeholder {
       font-weight: normal;
