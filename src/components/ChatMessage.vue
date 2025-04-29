@@ -86,7 +86,7 @@ function handleButtonClick(url: string) {
       font-size: var(--tt-chat-message-font-size);
       line-height: var(--tt-chat-message-line-height);
       font-weight: 400;
-      margin: 10px
+      margin: 5px 10px;
     }
 
     /* Stili aggiuntivi per il markdown renderizzato */
