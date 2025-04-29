@@ -1,13 +1,21 @@
 {
   "name": "tt-chat-n8n",
-  "version": "0.3.0",
+  "version": "0.5.1",
   "type": "module",
   "description": "A simplified chat widget for n8n",
+  "homepage": "https://www.npmjs.com/package/tt-chat-n8n",
   "author": {
     "name": "Nicola Tomassoni",
-    "email": "n.tomassoni@tourtools.it",
-    "url": "https://www.tourtools.it"
+    "email": "io@nicolatomassoni.it",
+    "url": "https://www.nicolatomassoni.it"
   },
+  "contributors": [
+    {
+      "name": "TourTools Team",
+      "email": "coder@tourtools.it",
+      "url": "https://www.tourtools.it"
+    }
+  ],
   "main": "dist/tt-chat.umd.js",
   "module": "dist/tt-chat.es.js",
   "types": "dist/main.d.ts",
@@ -45,5 +53,22 @@
     "dist",
     "README.md"
   ],
-  "license": "MIT"
+  "keywords": [
+    "n8n",
+    "chat",
+    "chatbot",
+    "widget",
+    "vue",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nonzod/n8n-chatbot"
+  },
+  "license": "MIT",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

@@ -123,11 +123,11 @@ function adjustHeight(event: Event) {
     min-height: 40px;
     max-height: 150px;
     overflow-y: auto;
-    font-family: inherit;
-    font-size: 1rem;
+    font-family: var(--tt-chat-font-family);
+    font-size: var(--tt-chat-input-font-size);
+    line-height: var(--tt-chat-input-line-height);
     outline: none;
     box-shadow: none;
-    line-height: 1.4;
     flex: 1;
     height: auto;
     margin: 0;

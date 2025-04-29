@@ -6,7 +6,6 @@
   --tt-chat-user-bg: #e0f7fa;
   --tt-chat-bot-bg: #f5f5f5;
   --tt-chat-user-color: #000000;
-  --tt-chat-bot-color: #044273;
   --tt-chat-header-bg: #044273;
   --tt-chat-header-color: #FFFFFF;
   --tt-chat-subheader-color: #FEBB2E;
@@ -29,21 +28,17 @@
   --tt-chat-toggle-size: 50px;
   --tt-chat-toggle-border-radius: 50%;
   --tt-chat-toggle-background: var(--tt-chat-primary-color);
-  --tt-chat-toggle-color: white;
   --tt-chat-tooltip-border-color: var(--tt-chat-primary-color);
   --tt-chat-tooltip-background: var(--tt-chat-primary-color);
   --tt-chat-tooltip-color: var(--tt-chat-primary-color);
 
   /* Messages */
-  --tt-chat-message-font-size: 1rem;
-  --tt-chat-message-padding: 10px;
+  --tt-chat-message-font-size: 16px;
   --tt-chat-message-border-radius: 5px;
-  --tt-chat-message-line-height: 1.5;
+  --tt-chat-message-line-height: 1.2;
   
   /* Input */
   --tt-chat-input-font-size: 14px;
-  --tt-chat-input-border: 1px solid #ddd;
-  --tt-chat-input-border-radius: 18px;
   --tt-chat-input-padding: 10px 15px;
-  --tt-chat-input-line-height: 1.4;
+  --tt-chat-input-line-height: 1.2;
 }

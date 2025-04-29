@@ -65,7 +65,7 @@ function handleButtonClick(url: string) {
   max-width: 80%;
   padding: 10px;
   margin-bottom: 10px;
-  border-radius: 10px;
+  border-radius: var(--tt-chat-message-border-radius);
   word-wrap: break-word;
 
   &.tt-chat-message-from-user {
@@ -76,15 +76,16 @@ function handleButtonClick(url: string) {
   }
 
   &.tt-chat-message-from-bot {
-    background-color: var(--tt-chat-bot-bg, #f5f5f5);
-    color: var(--tt-chat-bot-color, #000);
+    background-color: var(--tt-chat-bot-bg);
+    color: var(--tt-chat-primary-color);
     border-bottom-left-radius: 0;
   }
 
   .tt-chat-message-content {
-    line-height: 1.2;
-
     p {
+      font-size: var(--tt-chat-message-font-size);
+      line-height: var(--tt-chat-message-line-height);
+      font-weight: 400;
       margin: 10px
     }
 
