@@ -19,8 +19,7 @@ function handleConfirm() {
 <template>
   <div class="tt-chat-privacy">
     <div class="tt-chat-privacy-message">
-      Per continuare la conversazione, è necessario accettare la privacy policy.
-      <a v-if="privacyUrl" :href="privacyUrl" target="_blank" rel="noopener">Leggi la privacy policy</a>
+      Per contattarla è necessario accettare l'utilizzo dei dati secondo la nostra <a v-if="privacyUrl" :href="privacyUrl" target="_blank" rel="noopener">privacy policy</a>
     </div>
     
     <div class="tt-chat-privacy-options">
@@ -69,8 +68,6 @@ function handleConfirm() {
     line-height: 1.5;
     
     a {
-      display: block;
-      margin-top: 5px;
       color: var(--tt-chat-primary-color);
       text-decoration: none;
       

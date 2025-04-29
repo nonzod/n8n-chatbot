@@ -18,7 +18,14 @@ const mode = computed(() => options.value?.mode || 'window');
 <style lang="scss">
 @use './scss/styles.scss';
 
+// Stili globali
 .tt-chat-app {
+  font-family: var(--tt-chat-font-family);
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   width: 100%;
   height: 100%;
 }
