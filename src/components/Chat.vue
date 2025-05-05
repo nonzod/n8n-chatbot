@@ -37,14 +37,14 @@ async function handleSendMessage(text: string, files: File[] = []) {
     try {
       await startNewSession();
     } catch (error) {
-      console.error("Errore durante l'inizializzazione della sessione:", error);
+      console.error("startNewSession():", error);
     }
   }
   
   try {
     await sendMessage(text, files);
   } catch (error) {
-    console.error("Errore durante l'invio del messaggio:", error);
+    console.error("sendMessage():", error);
   }
 }
 
@@ -55,19 +55,13 @@ function checkMessageForPrivacyAction(message: ChatMessageType): void {
     return;
   }
   
-  console.log("Controllo messaggio:", message.id, message);
-  
   // Se il messaggio contiene azioni, verifica se c'è un'azione di privacy
   if (message?.actions && Array.isArray(message.actions)) {
-    console.log("Controllo azioni nel messaggio:", message.actions);
-    
     const privacyAction = message.actions.find(
       action => action && action.type === 'privacy'
     );
     
     if (privacyAction) {
-      console.log("Trovata azione privacy:", privacyAction);
-      
       // Salva l'azione e attiva il form di privacy
       currentPrivacyAction.value = privacyAction;
       showPrivacyForm.value = true;
@@ -80,13 +74,13 @@ function checkMessageForPrivacyAction(message: ChatMessageType): void {
 
 // Funzione per gestire la conferma di privacy
 async function handlePrivacyConfirm(privacyAccepted: boolean) {
-  console.log("Privacy confermata:", privacyAccepted);
+  console.log("Privacy:", privacyAccepted);
   
   if (!currentSessionId.value && startNewSession) {
     try {
       await startNewSession();
     } catch (error) {
-      console.error("Errore durante l'inizializzazione della sessione:", error);
+      console.error("startNewSession()", error);
     }
   }
   
@@ -97,7 +91,7 @@ async function handlePrivacyConfirm(privacyAccepted: boolean) {
     showPrivacyForm.value = false;
     currentPrivacyAction.value = null;
   } catch (error) {
-    console.error("Errore durante l'invio della risposta privacy:", error);
+    console.error("sendMessage():", error);
   }
 }
 

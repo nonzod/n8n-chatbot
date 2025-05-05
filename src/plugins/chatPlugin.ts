@@ -65,7 +65,7 @@ export const ChatPlugin: Plugin = {
 
       // Recupera l'ID di sessione da localStorage o crea un nuovo ID
       const sessionId = localStorage.getItem(LOCAL_STORAGE_SESSION_KEY) || generateId();
-      console.log("Trovato sessionId:", sessionId);
+      console.log("Found sessionId:", sessionId);
 
       try {
         // Carica i messaggi precedenti
@@ -74,7 +74,7 @@ export const ChatPlugin: Plugin = {
           resolvedOptions.value
         );
 
-        console.log("Risposta caricamento sessione:", previousMessagesResponse);
+        console.log("Session loading response:", previousMessagesResponse);
 
         // Verifica che ci siano dati nella risposta
         if (previousMessagesResponse?.data && Array.isArray(previousMessagesResponse.data) && previousMessagesResponse.data.length > 0) {
@@ -97,7 +97,7 @@ export const ChatPlugin: Plugin = {
             };
           });
 
-          console.log("Messaggi caricati:", loadedMessages);
+          console.log("Loaded messages:", loadedMessages);
 
           // Imposta i messaggi e l'ID di sessione
           if (loadedMessages.length > 0) {
@@ -107,20 +107,20 @@ export const ChatPlugin: Plugin = {
             // Salva l'ID di sessione in localStorage
             localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, sessionId);
 
-            console.log("Sessione caricata con successo, messaggi:", messages.value.length);
+            console.log("Session loaded successfully, messages:", messages.value.length);
             return sessionId;
           }
         }
 
         // Se non ci sono messaggi caricati ma abbiamo messaggi iniziali, avvia una nuova sessione
         if (initialMessages.value.length > 0) {
-          console.log("Nessun messaggio trovato, avvio nuova sessione");
+          console.log("No messages found, starting new session");
           return await startNewSession();
         }
 
         return sessionId;
       } catch (error) {
-        console.error('Errore durante il caricamento della sessione precedente:', error);
+        console.error('Error while loading previous session:', error);
         // In caso di errore, avvia una nuova sessione
         return await startNewSession();
       }
@@ -144,7 +144,7 @@ export const ChatPlugin: Plugin = {
         messages.value = [];
       }
 
-      console.log("Nuova sessione avviata:", newSessionId);
+      console.log("New session started:", newSessionId);
       return newSessionId;
     }
 

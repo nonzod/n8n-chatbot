@@ -21,7 +21,7 @@ export function createChat(options: ChatOptions): {
   _app: ReturnType<typeof createApp>;
   _container: Element;
 } {
-  console.log('Creazione del widget di chat con opzioni:', options);
+  console.log('Creating chat widget with options:', options);
 
   if (!options.webhookUrl) {
     console.error('[SimpleChatN8N] webhookUrl is required');
@@ -36,7 +36,7 @@ export function createChat(options: ChatOptions): {
 
   // Controlla se c'è già un'istanza attiva per questo target
   if (currentAppInstance && currentContainer === targetElement) {
-    console.log('Istanza già esistente per questo target, la riutilizzo');
+    console.log('Instance already exists for this target, reusing it');
     return {
       unmount: () => currentAppInstance?.unmount(),
       _app: currentAppInstance,
@@ -46,7 +46,7 @@ export function createChat(options: ChatOptions): {
 
   // Se esiste un'istanza precedente per un target diverso, la smontiamo
   if (currentAppInstance) {
-    console.log('Smontaggio istanza precedente');
+    console.log('Unmounting previous instance');
     currentAppInstance.unmount();
     currentAppInstance = null;
     currentContainer = null;
@@ -70,7 +70,7 @@ export function createChat(options: ChatOptions): {
   currentAppInstance = app;
   currentContainer = targetElement;
 
-  console.log('Widget di chat creato e montato su:', targetElement);
+  console.log('Chat widget created and mounted on:', targetElement);
 
   return {
     unmount: () => {
