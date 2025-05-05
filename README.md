@@ -1,3 +1,5 @@
+[![Banner image](https://raw.githubusercontent.com/nonzod/n8n-chatbot/main/resources/tourtools.png)](https://www.tourtools.it)
+
 # TT Chat N8N
 
 [![npm version](https://img.shields.io/npm/v/tt-chat-n8n.svg)](https://www.npmjs.com/package/tt-chat-n8n)
