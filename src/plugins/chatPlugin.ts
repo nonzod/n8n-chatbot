@@ -151,7 +151,7 @@ export const ChatPlugin: Plugin = {
     /**
      * Invia un messaggio
      */
-    async function sendMessageHandler(text: string, files: File[] = [], privacy?: boolean): Promise<void> {
+    async function sendMessageHandler(text: string, files: File[] = [], privacy?: boolean, callback?: string | null): Promise<void> {
       if (!currentSessionId.value) {
         await startNewSession();
       }
@@ -179,7 +179,8 @@ export const ChatPlugin: Plugin = {
           files,
           currentSessionId.value as string,
           resolvedOptions.value,
-          privacy
+          privacy,
+          callback
         );
 
         // Estrai il testo dalla risposta

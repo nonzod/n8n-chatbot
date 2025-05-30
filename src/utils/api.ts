@@ -75,7 +75,8 @@ export async function sendMessage(
   files: File[],
   sessionId: string,
   options: ChatOptions,
-  privacy?: boolean
+  privacy?: boolean,
+  callback?: string | null
 ): Promise<SendMessageResponse> {
   const method = options.webhookConfig?.method === 'POST' ? 'POST' : 'GET';
   const body: Record<string, any> = {
@@ -87,6 +88,13 @@ export async function sendMessage(
   // Aggiungi il parametro privacy se è stato specificato
   if (privacy !== undefined) {
     body.privacy = privacy;
+    console.log('Adding privacy response to request:', privacy);
+  }
+
+  // Aggiungi il parametro callback se è stato specificato
+  if (callback !== undefined && callback !== null) {
+    body.callback = callback;
+    console.log('Adding callback to request:', callback);
   }
   
   // Se ci sono file, usa FormData per l'upload

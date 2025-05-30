@@ -82,9 +82,10 @@ export interface SendMessageResponse {
 
 // Actions
 export interface ChatAction {
-  type: 'button' | 'checkbox' | 'privacy';
+  type: 'button' | 'checkbox' | 'privacy' | 'callback';
   label: string;
   action: string;
+  value?: string;
 }
 
 export interface SendMessageResponse {

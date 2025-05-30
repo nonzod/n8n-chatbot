@@ -17,6 +17,8 @@ const { messages, currentSessionId, waitingForResponse, sendMessage, startNewSes
 const showPrivacyForm = ref(false);
 const currentPrivacyAction = ref<ChatAction | null>(null);
 const lastProcessedMessageId = ref<string | null>(null);
+// Stato per memorizzare il valore callback
+const currentCallbackValue = ref<string | null>(null);
 
 // Computed properties per gli elementi UI
 const title = computed(() => options.value?.title || 'Chat');
