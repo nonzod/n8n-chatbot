@@ -1,4 +1,5 @@
 import type { Ref } from 'vue';
+
 export interface ChatMessage {
   id: string;
   text: string;
@@ -34,6 +35,13 @@ export interface ChatOptions {
     secondaryColor?: string;
     backgroundColor?: string;
     textColor?: string;
+    userMessageColor?: string;
+    botMessageColor?: string;
+    userTextColor?: string;
+    botTextColor?: string;
+    headerColor?: string;
+    headerTextColor?: string;
+    toggleBackground?: string; // Aggiunto per coerenza con helpers.ts
   };
   
   // Icons customization (Base64 encoded SVG)
@@ -57,8 +65,9 @@ export interface Chat {
   messages: Ref<ChatMessage[]>;
   currentSessionId: Ref<string | null>;
   waitingForResponse: Ref<boolean>;
+  pendingCallbackValue: Ref<string | null>;
   loadPreviousSession?: () => Promise<string | undefined>;
-  startNewSession?: () => Promise<void>;
+  startNewSession?: () => Promise<string>;
   sendMessage: (text: string, files: File[], privacy?: boolean) => Promise<void>;
 }
 
@@ -75,10 +84,20 @@ export interface LoadPreviousSessionResponse {
   data: LoadPreviousSessionResponseItem[];
 }
 
+// Actions
+export interface ChatAction {
+  type: 'button' | 'checkbox' | 'privacy' | 'callback';
+  label: string;
+  action: string;
+  value?: string; 
+}
+
 export interface SendMessageResponse {
   output?: string;
   text?: string;
+  actions?: ChatAction[];
 }
+
 
 // Actions
 export interface ChatAction {
