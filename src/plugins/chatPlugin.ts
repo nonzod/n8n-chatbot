@@ -303,7 +303,6 @@ export const ChatPlugin: Plugin = {
 
     // Crea lo store della chat
     const chatStore: Chat = {
-      initialMessages, // Questo è un ComputedRef, non direttamente ChatMessage[]
       messages,
       currentSessionId,
       waitingForResponse,
