@@ -1,6 +1,6 @@
 {
   "name": "tt-chat-n8n",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "type": "module",
   "description": "A simplified chat widget for n8n",
   "homepage": "https://www.npmjs.com/package/tt-chat-n8n",

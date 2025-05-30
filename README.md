@@ -226,7 +226,7 @@ When a user sends a message:
 
 The chat supports several types of interactive elements that can be included in bot responses:
 
-### Buttons
+### TODO: Buttons
 
 ```json
 {
@@ -268,6 +268,22 @@ The user's response will be sent back with a `privacy` field:
   "privacy": true
 }
 ```
+
+### Callback Actions
+
+Callback actions allow the bot to set a specific value that will be sent back to the webhook with the *next message the user sends*. This is useful for passing context or state silently.
+
+**n8n Response to set a callback for the next message:**
+```json
+{
+  "output": "Okay, I'll remember that. What would you like to do next?",
+  "actions": [
+    {
+      "type": "callback",
+      "value": "user_is_authenticated"
+    }
+  ]
+}
 
 ## JavaScript API
 
