@@ -77,7 +77,7 @@ function handleButtonClick(url: string) {
 
   &.tt-chat-message-from-bot {
     background-color: var(--tt-chat-bot-bg);
-    color: var(--tt-chat-primary-color);
+    color: var(--tt-chat-bot-color);
     border-bottom-left-radius: 0;
   }
 

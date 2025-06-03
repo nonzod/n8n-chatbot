@@ -38,9 +38,12 @@ export function applyTheme(theme: Record<string, string> = {}): void {
     '--tt-chat-user-bg': theme.userMessageColor || '#e0f7fa',
     '--tt-chat-bot-bg': theme.botMessageColor || '#f5f5f5',
     '--tt-chat-user-color': theme.userTextColor || '#000000',
+    '--tt-chat-bot-color': theme.botTextColor || '#000000',
     '--tt-chat-header-bg': theme.headerColor || '#f5f5f5',
     '--tt-chat-header-color': theme.headerTextColor || '#333333',
-    '--tt-chat-toggle-background': theme.toggleBackground || theme.primaryColor || '#044273'
+    '--tt-chat-subheader-color': theme.subHeaderTextColor || '#FEBB2E',
+    '--tt-chat-toggle-background': theme.toggleBackground || theme.primaryColor || '#044273',
+    '--tt-chat-font-family': theme.fontFamily || theme.fontFamily || '"Plus Jakarta Sans", sans-serif',
   };
   
   const style = document.createElement('style');

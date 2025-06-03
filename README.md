@@ -118,6 +118,8 @@ createChat({
     botTextColor: '#000000',
     headerColor: '#044273',
     headerTextColor: '#ffffff'
+    subHeaderTextColor: '#FEBB2E',
+    fontFamily: '"Plus Jakarta Sans", sans-serif'
   },
   
   // Icon customization (SVG as base64 strings)
