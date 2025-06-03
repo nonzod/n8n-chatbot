@@ -24,7 +24,7 @@ export const ChatPlugin: Plugin = {
       loadPreviousSession: true,
       chatInputKey: 'chatInput',
       chatSessionKey: 'sessionId',
-      theme: {}, // Sarà unito con le opzioni utente
+      theme: {},
       allowFileUploads: false,
       showTooltip: true,
       tooltipText: "Hai bisogno di aiuto?",
@@ -34,7 +34,7 @@ export const ChatPlugin: Plugin = {
       subtitle: 'Come posso aiutarti?',
     };
 
-    // Unisci le opzioni fornite con i default
+    // Unisce le opzioni fornite con i default
     const resolvedOptions = ref<ChatOptions>({
       ...defaultOptions,
       ...options,
@@ -42,7 +42,7 @@ export const ChatPlugin: Plugin = {
         ...defaultOptions.webhookConfig,
         ...options.webhookConfig,
       },
-      theme: { // Assicura un merge corretto anche per il tema
+      theme: {
         ...defaultOptions.theme,
         ...options.theme,
       },
@@ -52,16 +52,16 @@ export const ChatPlugin: Plugin = {
       }
     });
 
-    // Fornisci le opzioni come injection
+    // Fornisce le opzioni come injection
     app.provide(OptionsSymbol, resolvedOptions);
 
     // Stato della chat
     const messages = ref<ChatMessage[]>([]);
     const currentSessionId = ref<string | null>(null);
     const waitingForResponse = ref(false);
-    const pendingCallbackValue = ref<string | null>(null); // Stato per il valore del callback in sospeso
+    const pendingCallbackValue = ref<string | null>(null);
 
-    // Messaggi iniziali
+    // Messaggi iniziali computati
     const initialMessages = computed<ChatMessage[]>(() =>
       (resolvedOptions.value.initialMessages || []).map((text) => ({
         id: generateId(),
@@ -72,8 +72,23 @@ export const ChatPlugin: Plugin = {
     );
 
     /**
-     * Carica la sessione precedente o ne inizia una nuova se necessario.
-     * Restituisce l'ID di sessione.
+     * Inizializza una nuova sessione
+     */
+    async function startNewSession(): Promise<string> {
+      const newSessionId = generateId();
+      currentSessionId.value = newSessionId;
+      localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, newSessionId);
+      pendingCallbackValue.value = null;
+
+      // Aggiunge i messaggi iniziali se presenti
+      messages.value = initialMessages.value.length > 0 ? [...initialMessages.value] : [];
+
+      console.log("Nuova sessione iniziata:", newSessionId);
+      return newSessionId;
+    }
+
+    /**
+     * Carica la sessione precedente o ne inizia una nuova
      */
     async function loadPreviousSessionHandler(): Promise<string | undefined> {
       if (!resolvedOptions.value.loadPreviousSession) {
@@ -81,14 +96,13 @@ export const ChatPlugin: Plugin = {
       }
 
       const sessionIdFromStorage = localStorage.getItem(LOCAL_STORAGE_SESSION_KEY);
-
       if (!sessionIdFromStorage) {
         console.log("Nessun ID di sessione in localStorage. Inizio una nuova sessione.");
         return await startNewSession();
       }
       
       console.log("Trovato sessionId in localStorage:", sessionIdFromStorage);
-      currentSessionId.value = sessionIdFromStorage; // Imposta l'ID corrente
+      currentSessionId.value = sessionIdFromStorage;
 
       try {
         const previousMessagesResponse = await loadPreviousSession(
@@ -98,7 +112,7 @@ export const ChatPlugin: Plugin = {
 
         console.log("Risposta caricamento sessione:", previousMessagesResponse);
 
-        if (previousMessagesResponse?.data && Array.isArray(previousMessagesResponse.data) && previousMessagesResponse.data.length > 0) {
+        if (previousMessagesResponse?.data?.length > 0) {
           const timestamp = new Date().toISOString();
           const loadedMessages = previousMessagesResponse.data.map((message, index) => {
             const messageContent = message.kwargs?.content || "Messaggio vuoto";
@@ -115,187 +129,198 @@ export const ChatPlugin: Plugin = {
           });
 
           console.log("Messaggi caricati:", loadedMessages);
-          if (loadedMessages.length > 0) {
-            messages.value = loadedMessages;
-            // currentSessionId.value è già impostato
-            // localStorage ha già l'ID di sessione
-            console.log("Sessione caricata con successo, messaggi:", messages.value.length);
-            return sessionIdFromStorage;
-          }
-        }
-
-        // Se non ci sono messaggi caricati ma abbiamo messaggi iniziali, tecnicamente dovrebbe essere una nuova sessione
-        // ma poiché loadPreviousSession = true e abbiamo un ID, manteniamo l'ID ma mostriamo i messaggi iniziali
-        // Questo scenario è un po' ambiguo. Per ora, se non ci sono messaggi, non aggiungiamo quelli iniziali qui.
-        // Se vogliamo che i messaggi iniziali appaiano se la cronologia è vuota, startNewSession li gestisce.
-        // Se la cronologia è vuota, ma l'ID sessione esiste, non verranno mostrati i messaggi iniziali.
-        // Per coerenza, se non ci sono messaggi precedenti, forse è meglio resettare e usare startNewSession?
-        // Per ora, se non ci sono messaggi da caricare, considerala una sessione "vuota" con l'ID esistente.
-        // Se l'utente vuole iniziare fresco, dovrebbe pulire localStorage o implementare un bottone "nuova chat".
-        console.log("Nessun messaggio precedente trovato per la sessione:", sessionIdFromStorage);
-        messages.value = []; // Pulisci i messaggi se la sessione caricata è vuota
-        if (initialMessages.value.length > 0 && messages.value.length === 0) {
-            console.log("La sessione caricata è vuota, ma ci sono messaggi iniziali. Aggiungo messaggi iniziali.");
+          messages.value = loadedMessages;
+          
+          // Se la cronologia è vuota ma ci sono messaggi iniziali, li aggiunge
+          if (messages.value.length === 0 && initialMessages.value.length > 0) {
+            console.log("Sessione vuota, aggiunto messaggi iniziali");
             messages.value = [...initialMessages.value];
+          }
+
+          return sessionIdFromStorage;
         }
 
-
+        // Sessione vuota - aggiunge messaggi iniziali se presenti
+        console.log("Nessun messaggio precedente trovato per la sessione:", sessionIdFromStorage);
+        messages.value = initialMessages.value.length > 0 ? [...initialMessages.value] : [];
         return sessionIdFromStorage;
+
       } catch (error) {
         console.error('Errore durante il caricamento della sessione precedente:', error);
-        // In caso di errore nel caricamento, inizia una nuova sessione
         return await startNewSession();
       }
     }
 
     /**
-     * Inizia una nuova sessione.
-     * Restituisce il nuovo ID di sessione.
+     * Assicura che esista un ID di sessione valido
      */
-    async function startNewSession(): Promise<string> {
-      const newSessionId = generateId();
-      currentSessionId.value = newSessionId;
-      localStorage.setItem(LOCAL_STORAGE_SESSION_KEY, newSessionId);
-      pendingCallbackValue.value = null; // Resetta il callback in sospeso
-
-      // Aggiungi i messaggi iniziali se presenti
-      if (initialMessages.value.length > 0) {
-        messages.value = [...initialMessages.value];
-      } else {
-        // Pulisci i messaggi esistenti
-        messages.value = [];
+    async function ensureSessionId(): Promise<string> {
+      if (!currentSessionId.value) {
+        const sessionId = resolvedOptions.value.loadPreviousSession 
+          ? await loadPreviousSessionHandler() 
+          : await startNewSession();
+        
+        if (!sessionId) {
+          throw new Error("Impossibile stabilire un ID di sessione");
+        }
+        return sessionId;
       }
-
-      console.log("Nuova sessione iniziata:", newSessionId);
-      return newSessionId;
+      return currentSessionId.value;
     }
 
     /**
-     * Invia un messaggio.
-     * Il parametro 'callback' non è più passato direttamente qui;
-     * viene letto da 'pendingCallbackValue'.
+     * Aggiunge un messaggio di errore alla chat
+     */
+    function addErrorMessage(text: string): void {
+      messages.value.push({
+        id: generateId(),
+        text,
+        sender: 'bot',
+        createdAt: new Date().toISOString(),
+      });
+    }
+
+    /**
+     * Estrae i testi di risposta dall'oggetto response
+     */
+    function extractResponseTexts(response: any): string[] {
+      // Gestisce array di messaggi
+      if (Array.isArray(response.output)) {
+        return response.output.filter((msg: any) => typeof msg === 'string' && msg.trim() !== '');
+      }
+      
+      // Gestisce stringa singola
+      if (typeof response.output === 'string' && response.output.trim() !== '') {
+        return [response.output];
+      }
+      
+      // Fallback su response.text
+      const fallbackText = response.text ?? '';
+      if (fallbackText.trim() !== '') {
+        return [fallbackText];
+      }
+
+      // Se non ci sono testi ma ci sono altri dati (senza azioni), converte in JSON
+      if (Object.keys(response).length > 0 && (!response.actions || response.actions.length === 0)) {
+        try {
+          return [JSON.stringify(response, null, 2)];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      return [];
+    }
+
+    /**
+     * Processa le azioni dalla risposta del server
+     */
+    function processActions(actions: ChatAction[]): void {
+      const callbackAction = actions.find(
+        action => action.type === 'callback' && 
+                 typeof action.value === 'string' && 
+                 action.value.trim() !== ''
+      );
+      
+      if (callbackAction?.value) {
+        console.log(`Azione callback ricevuta. Memorizzo il valore: ${callbackAction.value} per il prossimo messaggio utente.`);
+        pendingCallbackValue.value = callbackAction.value;
+      }
+    }
+
+    /**
+     * Crea e aggiunge i messaggi di risposta del bot
+     */
+    function addBotMessages(responseTexts: string[], actions?: ChatAction[]): void {
+      responseTexts.forEach((responseText, index) => {
+        const receivedMessage: ChatMessage = {
+          id: generateId(),
+          text: responseText,
+          sender: 'bot',
+          createdAt: new Date().toISOString(),
+        };
+
+        // Aggiunge le azioni solo al primo messaggio per evitare duplicazioni
+        if (index === 0 && actions?.length) {
+          receivedMessage.actions = actions;
+          processActions(actions);
+        }
+
+        messages.value.push(receivedMessage);
+      });
+
+      // Se ci sono azioni ma nessun testo, crea comunque un messaggio per le azioni
+      if (responseTexts.length === 0 && actions?.length) {
+        const actionsMessage: ChatMessage = {
+          id: generateId(),
+          text: '',
+          sender: 'bot',
+          createdAt: new Date().toISOString(),
+          actions,
+        };
+
+        processActions(actions);
+        messages.value.push(actionsMessage);
+      }
+    }
+
+    /**
+     * Invia un messaggio al server
      */
     async function sendMessageHandler(
         text: string,
         files: File[] = [],
         privacy?: boolean
     ): Promise<void> {
-      // Assicura che ci sia un ID di sessione
-      if (!currentSessionId.value) {
-        // Prova a caricare o iniziare una nuova sessione
-        // loadPreviousSessionHandler si occuperà di chiamare startNewSession se necessario
-        await (resolvedOptions.value.loadPreviousSession ? loadPreviousSessionHandler() : startNewSession());
-        
-        // Se dopo il tentativo non c'è ancora un ID di sessione, è un problema.
-        if (!currentSessionId.value) {
-            console.error("Impossibile stabilire un ID di sessione.");
-            messages.value.push({
-                id: generateId(),
-                text: 'Errore: Impossibile stabilire una sessione. Per favore, ricarica.',
-                sender: 'bot',
-                createdAt: new Date().toISOString(),
-            });
-            waitingForResponse.value = false; // Resetta lo stato di attesa
-            return;
-        }
-      }
-
       const userMessageText = text.trim();
-      const callbackToSend = pendingCallbackValue.value; // Leggi il valore del callback in sospeso
+      const callbackToSend = pendingCallbackValue.value;
 
-      // Condizione per non inviare:
-      // - Nessun testo utente
-      // - Nessun file
-      // - Non è una risposta a un prompt di privacy (privacy === undefined)
-      // - Nessun callback in sospeso da inviare
-      if (userMessageText === '' && files.length === 0 && privacy === undefined && !callbackToSend) {
-        console.log("sendMessageHandler: Nessun testo, file, dati privacy o callback in sospeso. Nulla da inviare.");
-        return; // Non fare nulla se non c'è input significativo e nessun callback
+      // Verifica se c'è qualcosa da inviare
+      if (!userMessageText && !files.length && privacy === undefined && !callbackToSend) {
+        console.log("sendMessageHandler: Nessun contenuto da inviare.");
+        return;
       }
-
-      // Aggiungi il messaggio dell'utente all'UI solo se c'è testo o file effettivi
-      // Se è solo un callback con testo vuoto, la richiesta verrà inviata,
-      // ma non aggiungeremo un messaggio utente vuoto all'UI.
-      if (userMessageText !== '' || files.length > 0) {
-        const sentMessage: ChatMessage = {
-          id: generateId(),
-          text: userMessageText,
-          sender: 'user',
-          files,
-          createdAt: new Date().toISOString(),
-        };
-        messages.value.push(sentMessage);
-      }
-      
-      waitingForResponse.value = true;
 
       try {
+        // Assicura che esista un ID di sessione
+        const sessionId = await ensureSessionId();
+
+        // Aggiunge il messaggio dell'utente all'UI solo se c'è contenuto effettivo
+        if (userMessageText || files.length > 0) {
+          const sentMessage: ChatMessage = {
+            id: generateId(),
+            text: userMessageText,
+            sender: 'user',
+            files,
+            createdAt: new Date().toISOString(),
+          };
+          messages.value.push(sentMessage);
+        }
+        
+        waitingForResponse.value = true;
+
         // Invia il messaggio al server
         const response = await sendMessage(
-          userMessageText, // Può essere una stringa vuota se l'utente ha solo premuto invio con un callback pendente
+          userMessageText,
           files,
-          currentSessionId.value as string, // Ora dovrebbe essere sempre valorizzato
+          sessionId,
           resolvedOptions.value,
           privacy,
-          callbackToSend // Invia il valore del callback memorizzato (può essere null)
+          callbackToSend
         );
 
-        // Se il messaggio è stato inviato con successo e c'era un callback, resettalo.
+        // Reset del callback se inviato con successo
         if (callbackToSend) {
           pendingCallbackValue.value = null;
         }
 
-        // Estrai il testo dalla risposta
-        let responseText = response.output ?? response.text ?? '';
-
-        // Se non c'è un testo ma ci sono altri dati (e non ci sono azioni), prova a convertirli in JSON
-        if (responseText === '' && Object.keys(response).length > 0 && (!response.actions || response.actions.length === 0)) {
-          try {
-            responseText = JSON.stringify(response, null, 2);
-          } catch (e) {
-            // In caso di errore, usa una stringa vuota
-            responseText = '';
-          }
-        }
-
-        // Crea il messaggio di risposta del bot se c'è testo o azioni
-        if (responseText.trim() !== '' || (response.actions && response.actions.length > 0) ) {
-            const receivedMessage: ChatMessage = {
-              id: generateId(),
-              text: responseText,
-              sender: 'bot',
-              createdAt: new Date().toISOString(),
-            };
-    
-            // Aggiungi le azioni se presenti nella risposta
-            if (response.actions && Array.isArray(response.actions) && response.actions.length > 0) {
-              receivedMessage.actions = response.actions;
-    
-              // --- LOGICA PER MEMORIZZARE NUOVA AZIONE CALLBACK DALLA RISPOSTA ---
-              const newCallbackAction = receivedMessage.actions.find(
-                (action: ChatAction) => action.type === 'callback' && typeof action.value === 'string' && action.value.trim() !== ''
-              );
-              if (newCallbackAction && newCallbackAction.value) {
-                console.log(`Azione callback ricevuta. Memorizzo il valore: ${newCallbackAction.value} per il prossimo messaggio utente.`);
-                pendingCallbackValue.value = newCallbackAction.value; // Memorizza per il PROSSIMO invio
-              }
-              // --- FINE LOGICA ---
-            }
-    
-            // Aggiungi la risposta alla lista dei messaggi
-            messages.value.push(receivedMessage);
-        }
+        // Estrae e processa la risposta
+        const responseTexts = extractResponseTexts(response);
+        addBotMessages(responseTexts, response.actions);
 
       } catch (error) {
         console.error('Invio messaggio fallito:', error);
-        // Non resettare pendingCallbackValue.value qui, così può essere ritentato col prossimo messaggio.
-        // Il callback rimane "in sospeso" se l'invio fallisce.
-        messages.value.push({
-          id: generateId(),
-          text: 'Spiacenti, si è verificato un errore durante l\'elaborazione della tua richiesta. Riprova.',
-          sender: 'bot',
-          createdAt: new Date().toISOString(),
-        });
+        addErrorMessage('Spiacenti, si è verificato un errore durante l\'elaborazione della tua richiesta. Riprova.');
       } finally {
         waitingForResponse.value = false;
       }
@@ -306,13 +331,13 @@ export const ChatPlugin: Plugin = {
       messages,
       currentSessionId,
       waitingForResponse,
-      pendingCallbackValue, // Esponi il valore del callback reattivo
+      pendingCallbackValue,
       loadPreviousSession: loadPreviousSessionHandler,
       startNewSession,
-      sendMessage: sendMessageHandler, // La firma ora corrisponde a quella definita in interface Chat
+      sendMessage: sendMessageHandler,
     };
 
-    // Fornisci lo store come injection
+    // Fornisce lo store come injection
     app.provide(ChatSymbol, chatStore);
   },
 };

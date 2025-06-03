@@ -93,7 +93,7 @@ export interface ChatAction {
 }
 
 export interface SendMessageResponse {
-  output?: string;
+  output?: string | string[];
   text?: string;
   actions?: ChatAction[];
 }
@@ -105,10 +105,4 @@ export interface ChatAction {
   label: string;
   action: string;
   value?: string;
-}
-
-export interface SendMessageResponse {
-  output?: string;
-  text?: string;
-  actions?: ChatAction[];
 }
