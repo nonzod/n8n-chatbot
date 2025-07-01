@@ -220,6 +220,8 @@ onMounted(async () => {
       line-height: 31px;
       font-weight: 600;
       color: var(--tt-chat-header-color, #333);
+      position: relative;
+      z-index: 1;
     }
     
     p {
@@ -227,6 +229,8 @@ onMounted(async () => {
       font-size: 18px;
       line-height: 22px;      
       color: var(--tt-chat-subheader-color, #666);
+      position: relative;
+      z-index: 1;
     }
 
     &-logo {

@@ -67,6 +67,7 @@ function handleButtonClick(url: string) {
   margin-bottom: 10px;
   border-radius: var(--tt-chat-message-border-radius);
   word-wrap: break-word;
+  box-shadow: 2px 2px 20px silver;
 
   &.tt-chat-message-from-user {
     background-color: var(--tt-chat-user-bg, #e0f7fa);
