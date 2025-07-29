@@ -36,11 +36,12 @@ export default defineConfig({
       fileName: (format) => (includeVue ? `tt-chat.bundle.${format}.js` : `tt-chat.${format}.js`),
     },
     rollupOptions: {
-      // Decidi se includere o escludere Vue dal bundle
-      external: includeVue ? [] : ['vue'],
+      // Decidi se includere o escludere Vue e dipendenze dal bundle
+      external: includeVue ? [] : ['vue', 'vue-select'],
       output: {
         globals: includeVue ? {} : {
           vue: 'Vue',
+          'vue-select': 'VueSelect',
         },
         exports: 'named',
       },
