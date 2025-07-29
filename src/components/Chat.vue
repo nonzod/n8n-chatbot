@@ -4,6 +4,7 @@ import ChatMessage from './ChatMessage.vue';
 import ChatInput from './ChatInput.vue';
 import ConfirmPrivacy from './ConfirmPrivacy.vue';
 import SelectProvince from './SelectProvince.vue';
+import Datepicker from './Datepicker.vue';
 import IconLoader from './IconLoader.vue';
 import { useChat } from '../composables/useChat';
 import { useOptions } from '../composables/useOptions';
@@ -21,6 +22,10 @@ const currentPrivacyAction = ref<ChatAction | null>(null);
 // Stato per controllare la visualizzazione del form provincia
 const showProvinceForm = ref(false);
 const currentProvinceAction = ref<ChatAction | null>(null);
+
+// Stato per controllare la visualizzazione del datepicker
+const showDatePicker = ref(false);
+const currentDatePickerAction = ref<ChatAction | null>(null);
 
 const lastProcessedMessageId = ref<string | null>(null);
 // Stato per memorizzare il valore callback
@@ -56,7 +61,7 @@ async function handleSendMessage(text: string, files: File[] = []) {
   }
 }
 
-// Funzione per controllare un messaggio per azioni speciali (privacy e provincia)
+// Funzione per controllare un messaggio per azioni speciali (privacy, provincia e datepicker)
 function checkMessageForSpecialActions(message: ChatMessageType): void {
   // Se il messaggio è già stato processato, esci
   if (message.id === lastProcessedMessageId.value) {
@@ -85,6 +90,18 @@ function checkMessageForSpecialActions(message: ChatMessageType): void {
     if (provinceAction) {
       currentProvinceAction.value = provinceAction;
       showProvinceForm.value = true;
+      lastProcessedMessageId.value = message.id;
+      return;
+    }
+    
+    // Controlla le azioni del datepicker
+    const datePickerAction = message.actions.find(
+      action => action && action.type === 'datepicker'
+    );
+    
+    if (datePickerAction) {
+      currentDatePickerAction.value = datePickerAction;
+      showDatePicker.value = true;
       lastProcessedMessageId.value = message.id;
       return;
     }
@@ -132,6 +149,29 @@ async function handleProvinceSelect(province: string) {
     // Nascondi il form di selezione provincia
     showProvinceForm.value = false;
     currentProvinceAction.value = null;
+  } catch (error) {
+    console.error("sendMessage():", error);
+  }
+}
+
+// Funzione per gestire la selezione della data
+async function handleDateSelect(date: string) {
+  console.log("Data selezionata:", date);
+  
+  if (!currentSessionId.value && startNewSession) {
+    try {
+      await startNewSession();
+    } catch (error) {
+      console.error("startNewSession()", error);
+    }
+  }
+  
+  try {
+    // Invia la data selezionata come messaggio
+    await sendMessage(date, []);
+    // Nascondi il datepicker
+    showDatePicker.value = false;
+    currentDatePickerAction.value = null;
   } catch (error) {
     console.error("sendMessage():", error);
   }
@@ -237,6 +277,14 @@ onMounted(async () => {
         />
       </div>
       
+      <!-- Datepicker quando richiesto -->
+      <div v-else-if="showDatePicker" class="tt-chat-datepicker-container">
+        <Datepicker 
+          :label="currentDatePickerAction?.label"
+          @select="handleDateSelect"
+        />
+      </div>
+      
       <!-- Form standard in tutti gli altri casi -->
       <div v-else class="tt-chat-input-container">
         <ChatInput @send="handleSendMessage" />
@@ -336,7 +384,8 @@ onMounted(async () => {
   }
   
   &-privacy-container,
-  &-province-container {
+  &-province-container,
+  &-datepicker-container {
     width: 100%;
   }
   

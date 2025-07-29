@@ -86,7 +86,7 @@ export interface LoadPreviousSessionResponse {
 
 // Actions
 export interface ChatAction {
-  type: 'button' | 'checkbox' | 'privacy' | 'callback' | 'select_province';
+  type: 'button' | 'checkbox' | 'privacy' | 'callback' | 'select_province' | 'datepicker';
   label: string;
   action: string;
   value?: string;

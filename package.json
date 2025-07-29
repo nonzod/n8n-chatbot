@@ -37,6 +37,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vuepic/vue-datepicker": "^11.0.2",
     "vue": "^3.3.0",
     "vue-markdown-render": "^2.2.1",
     "vue-select": "^4.0.0-beta.6"
