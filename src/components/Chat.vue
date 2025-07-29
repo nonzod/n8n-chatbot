@@ -5,6 +5,7 @@ import ChatInput from './ChatInput.vue';
 import ConfirmPrivacy from './ConfirmPrivacy.vue';
 import SelectProvince from './SelectProvince.vue';
 import Datepicker from './Datepicker.vue';
+import InputComponent from './InputComponent.vue';
 import IconLoader from './IconLoader.vue';
 import { useChat } from '../composables/useChat';
 import { useOptions } from '../composables/useOptions';
@@ -26,6 +27,10 @@ const currentProvinceAction = ref<ChatAction | null>(null);
 // Stato per controllare la visualizzazione del datepicker
 const showDatePicker = ref(false);
 const currentDatePickerAction = ref<ChatAction | null>(null);
+
+// Stato per controllare la visualizzazione dell'input component
+const showInputComponent = ref(false);
+const currentInputAction = ref<ChatAction | null>(null);
 
 const lastProcessedMessageId = ref<string | null>(null);
 // Stato per memorizzare il valore callback
@@ -61,7 +66,7 @@ async function handleSendMessage(text: string, files: File[] = []) {
   }
 }
 
-// Funzione per controllare un messaggio per azioni speciali (privacy, provincia e datepicker)
+// Funzione per controllare un messaggio per azioni speciali (privacy, provincia, datepicker e input)
 function checkMessageForSpecialActions(message: ChatMessageType): void {
   // Se il messaggio è già stato processato, esci
   if (message.id === lastProcessedMessageId.value) {
@@ -102,6 +107,18 @@ function checkMessageForSpecialActions(message: ChatMessageType): void {
     if (datePickerAction) {
       currentDatePickerAction.value = datePickerAction;
       showDatePicker.value = true;
+      lastProcessedMessageId.value = message.id;
+      return;
+    }
+    
+    // Controlla le azioni di input (iniziano con "input_type_")
+    const inputAction = message.actions.find(
+      action => action && action.type.startsWith('input_type_')
+    );
+    
+    if (inputAction) {
+      currentInputAction.value = inputAction;
+      showInputComponent.value = true;
       lastProcessedMessageId.value = message.id;
       return;
     }
@@ -172,6 +189,29 @@ async function handleDateSelect(date: string) {
     // Nascondi il datepicker
     showDatePicker.value = false;
     currentDatePickerAction.value = null;
+  } catch (error) {
+    console.error("sendMessage():", error);
+  }
+}
+
+// Funzione per gestire il submit dell'input component
+async function handleInputSubmit(value: string) {
+  console.log("Input inviato:", value);
+  
+  if (!currentSessionId.value && startNewSession) {
+    try {
+      await startNewSession();
+    } catch (error) {
+      console.error("startNewSession()", error);
+    }
+  }
+  
+  try {
+    // Invia il valore dell'input come messaggio
+    await sendMessage(value, []);
+    // Nascondi l'input component
+    showInputComponent.value = false;
+    currentInputAction.value = null;
   } catch (error) {
     console.error("sendMessage():", error);
   }
@@ -285,6 +325,15 @@ onMounted(async () => {
         />
       </div>
       
+      <!-- Input component quando richiesto -->
+      <div v-else-if="showInputComponent" class="tt-chat-input-component-container">
+        <InputComponent 
+          :inputType="currentInputAction?.type || 'input_type_text'"
+          :label="currentInputAction?.label"
+          @submit="handleInputSubmit"
+        />
+      </div>
+      
       <!-- Form standard in tutti gli altri casi -->
       <div v-else class="tt-chat-input-container">
         <ChatInput @send="handleSendMessage" />
@@ -385,7 +434,8 @@ onMounted(async () => {
   
   &-privacy-container,
   &-province-container,
-  &-datepicker-container {
+  &-datepicker-container,
+  &-input-component-container {
     width: 100%;
   }
   

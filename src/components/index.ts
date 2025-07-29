@@ -7,3 +7,4 @@ export { default as ChatToggle } from './ChatToggle.vue';
 export { default as ConfirmPrivacy } from './ConfirmPrivacy.vue';
 export { default as SelectProvince } from './SelectProvince.vue';
 export { default as Datepicker } from './Datepicker.vue';
+export { default as InputComponent } from './InputComponent.vue';

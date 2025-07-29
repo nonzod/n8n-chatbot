@@ -134,7 +134,7 @@ function handleConfirm() {
 
         <div class="tt-chat-province-select">
             <v-select v-model="selectedProvince" :options="provinces" :reduce="province => province.code" label="province" :searchable="true" :clearable="false"
-                placeholder="Cerca" class="tt-chat-province-dropdown" />
+                placeholder="Cerca" class="tt-chat-province-dropdown" append-to-body />
         </div>
 
         <button class="tt-chat-province-button" @click="handleConfirm" :disabled="!selectedProvince">
