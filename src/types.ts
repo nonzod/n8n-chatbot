@@ -86,23 +86,14 @@ export interface LoadPreviousSessionResponse {
 
 // Actions
 export interface ChatAction {
-  type: 'button' | 'checkbox' | 'privacy' | 'callback';
+  type: 'button' | 'checkbox' | 'privacy' | 'callback' | 'select_province';
   label: string;
   action: string;
-  value?: string; 
+  value?: string;
 }
 
 export interface SendMessageResponse {
   output?: string | string[];
   text?: string;
   actions?: ChatAction[];
-}
-
-
-// Actions
-export interface ChatAction {
-  type: 'button' | 'checkbox' | 'privacy' | 'callback';
-  label: string;
-  action: string;
-  value?: string;
 }

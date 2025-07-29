@@ -3,6 +3,7 @@ import { ref, onMounted, nextTick, computed, watch } from 'vue';
 import ChatMessage from './ChatMessage.vue';
 import ChatInput from './ChatInput.vue';
 import ConfirmPrivacy from './ConfirmPrivacy.vue';
+import SelectProvince from './SelectProvince.vue';
 import IconLoader from './IconLoader.vue';
 import { useChat } from '../composables/useChat';
 import { useOptions } from '../composables/useOptions';
@@ -16,6 +17,11 @@ const { messages, currentSessionId, waitingForResponse, sendMessage, startNewSes
 // Stato per controllare la visualizzazione del form privacy
 const showPrivacyForm = ref(false);
 const currentPrivacyAction = ref<ChatAction | null>(null);
+
+// Stato per controllare la visualizzazione del form provincia
+const showProvinceForm = ref(false);
+const currentProvinceAction = ref<ChatAction | null>(null);
+
 const lastProcessedMessageId = ref<string | null>(null);
 // Stato per memorizzare il valore callback
 const currentCallbackValue = ref<string | null>(null);
@@ -50,26 +56,37 @@ async function handleSendMessage(text: string, files: File[] = []) {
   }
 }
 
-// Funzione per controllare un messaggio per azioni di privacy
-function checkMessageForPrivacyAction(message: ChatMessageType): void {
+// Funzione per controllare un messaggio per azioni speciali (privacy e provincia)
+function checkMessageForSpecialActions(message: ChatMessageType): void {
   // Se il messaggio è già stato processato, esci
   if (message.id === lastProcessedMessageId.value) {
     return;
   }
   
-  // Se il messaggio contiene azioni, verifica se c'è un'azione di privacy
+  // Se il messaggio contiene azioni, verifica se c'è un'azione speciale
   if (message?.actions && Array.isArray(message.actions)) {
+    // Controlla prima le azioni di privacy
     const privacyAction = message.actions.find(
       action => action && action.type === 'privacy'
     );
     
     if (privacyAction) {
-      // Salva l'azione e attiva il form di privacy
       currentPrivacyAction.value = privacyAction;
       showPrivacyForm.value = true;
-      
-      // Marca questo messaggio come processato
       lastProcessedMessageId.value = message.id;
+      return;
+    }
+    
+    // Controlla le azioni di selezione provincia
+    const provinceAction = message.actions.find(
+      action => action && action.type === 'select_province'
+    );
+    
+    if (provinceAction) {
+      currentProvinceAction.value = provinceAction;
+      showProvinceForm.value = true;
+      lastProcessedMessageId.value = message.id;
+      return;
     }
   }
 }
@@ -97,7 +114,30 @@ async function handlePrivacyConfirm(privacyAccepted: boolean) {
   }
 }
 
-// Controlla i nuovi messaggi per le azioni di privacy
+// Funzione per gestire la selezione della provincia
+async function handleProvinceSelect(province: string) {
+  console.log("Provincia selezionata:", province);
+  
+  if (!currentSessionId.value && startNewSession) {
+    try {
+      await startNewSession();
+    } catch (error) {
+      console.error("startNewSession()", error);
+    }
+  }
+  
+  try {
+    // Invia la provincia selezionata come messaggio
+    await sendMessage(province, []);
+    // Nascondi il form di selezione provincia
+    showProvinceForm.value = false;
+    currentProvinceAction.value = null;
+  } catch (error) {
+    console.error("sendMessage():", error);
+  }
+}
+
+// Controlla i nuovi messaggi per le azioni speciali
 watch(messages, (newMessages) => {
   scrollToBottom();
   
@@ -105,7 +145,7 @@ watch(messages, (newMessages) => {
   if (newMessages.length > 0) {
     // Controlla l'ultimo messaggio
     const latestMessage = newMessages[newMessages.length - 1];
-    checkMessageForPrivacyAction(latestMessage);
+    checkMessageForSpecialActions(latestMessage);
   }
 }, { deep: true });
 
@@ -133,11 +173,11 @@ onMounted(async () => {
       console.log("Forced session:", currentSessionId.value);
     }
     
-    // Controlla tutti i messaggi esistenti per azioni di privacy
+    // Controlla tutti i messaggi esistenti per azioni speciali
     if (messages.value.length > 0) {
       // Controlla solo l'ultimo messaggio per semplicità
       const latestMessage = messages.value[messages.value.length - 1];
-      checkMessageForPrivacyAction(latestMessage);
+      checkMessageForSpecialActions(latestMessage);
     }
     
     // Scorri in fondo alla chat dopo l'inizializzazione
@@ -187,6 +227,13 @@ onMounted(async () => {
         <ConfirmPrivacy 
           :privacyUrl="currentPrivacyAction?.action"
           @confirm="handlePrivacyConfirm"
+        />
+      </div>
+      
+      <!-- Form di selezione provincia quando richiesto -->
+      <div v-else-if="showProvinceForm" class="tt-chat-province-container">
+        <SelectProvince 
+          @select="handleProvinceSelect"
         />
       </div>
       
@@ -288,7 +335,8 @@ onMounted(async () => {
     }
   }
   
-  &-privacy-container {
+  &-privacy-container,
+  &-province-container {
     width: 100%;
   }
   
