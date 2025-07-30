@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, computed, watch } from 'vue';
 import ChatMessage from './ChatMessage.vue';
-import ChatInput from './ChatInput.vue';
-import ConfirmPrivacy from './ConfirmPrivacy.vue';
-import SelectProvince from './SelectProvince.vue';
-import Datepicker from './Datepicker.vue';
-import InputComponent from './InputComponent.vue';
 import IconLoader from './IconLoader.vue';
+import ChatInput from './input/ChatInput.vue';
+import ConfirmPrivacy from './input/ConfirmPrivacy.vue';
+import SelectProvince from './input/SelectProvince.vue';
+import Datepicker from './input/Datepicker.vue';
+import SpecialInput from './input/SpecialInput.vue';
 import { useChat } from '../composables/useChat';
 import { useOptions } from '../composables/useOptions';
 import type { ChatAction, ChatMessage as ChatMessageType } from '../types';
@@ -327,7 +327,7 @@ onMounted(async () => {
       
       <!-- Input component quando richiesto -->
       <div v-else-if="showInputComponent" class="tt-chat-input-component-container">
-        <InputComponent 
+        <SpecialInput 
           :inputType="currentInputAction?.type || 'input_type_text'"
           :label="currentInputAction?.label"
           @submit="handleInputSubmit"

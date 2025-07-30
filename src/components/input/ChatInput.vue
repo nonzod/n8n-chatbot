@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, nextTick, watch } from 'vue';
-import { useOptions } from '../composables/useOptions';
-import { useChat } from '../composables/useChat';
-import ButtonSend from './ButtonSend.vue';
+import { useOptions } from '../../composables/useOptions';
+import { useChat } from '../../composables/useChat';
+import ButtonSend from '../ButtonSend.vue';
 
 const input = ref('');
 const files = ref<FileList | null>(null);

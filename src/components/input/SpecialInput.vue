@@ -89,7 +89,7 @@ onMounted(() => {
   if (htmlInputType.value === 'tel' && inputRef.value) {
     iti = intlTelInput(inputRef.value, {
       initialCountry: 'it',
-      loadUtils: () => import("./../../node_modules/intl-tel-input/build/js/utils.js"),
+      loadUtils: () => import("intl-tel-input/build/js/utils.js"),
       autoPlaceholder: 'aggressive',
       separateDialCode: false,
       //allowDropdown: true,
