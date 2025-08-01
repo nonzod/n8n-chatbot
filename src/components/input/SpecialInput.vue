@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import intlTelInput from 'intl-tel-input';
+import intlTelInput from 'intl-tel-input/intlTelInputWithUtils';
 import 'intl-tel-input/build/css/intlTelInput.css';
 
 const emit = defineEmits<{
@@ -89,10 +89,10 @@ onMounted(() => {
   if (htmlInputType.value === 'tel' && inputRef.value) {
     iti = intlTelInput(inputRef.value, {
       initialCountry: 'it',
-      loadUtils: () => import("intl-tel-input/build/js/utils.js"),
+      //loadUtils: () => import('https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.1/build/js/utils.js'),
       autoPlaceholder: 'aggressive',
       separateDialCode: false,
-      //allowDropdown: true,
+      allowDropdown: true,
       useFullscreenPopup: true
     });
     
